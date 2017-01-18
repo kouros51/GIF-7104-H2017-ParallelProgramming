@@ -1,0 +1,9 @@
+# Folders to ignore
+.idea
+target
+.settings
+
+# Files to ignore
+**.iml
+**.project
+**.classpath
