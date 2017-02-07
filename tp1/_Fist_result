@@ -1,0 +1,20 @@
+Temps d'execution = 24.039553
+
+
+Avec 10^8
+Première approche:
+Le nombre de nombre primaires est 5761455.
+Temps d'execution = 2.243586 sec 
+
+Deuxième approche:
+Le nombre de nombre primaires est 5761455.
+Temps d'execution = 1.529248 sec
+
+Avec 10^9
+Première approche:
+Le nombre de nombre primaires est 50847534.
+Temps d'execution = 27.476755 sec
+
+Deuxième approche:
+Le nombre de nombre primaires est 50847534.
+Temps d'execution = 17.706021 sec
