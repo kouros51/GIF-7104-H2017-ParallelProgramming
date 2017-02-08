@@ -15,4 +15,5 @@ Makefile
 CMakeCache.txt
 SourceFiles
 **.synctex.gz
-**.latex.json
+**.latex.*
+**.pdf
