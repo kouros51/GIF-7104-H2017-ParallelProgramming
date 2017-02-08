@@ -35,18 +35,18 @@ int main(int argc, char *argv[])
         }
     }
 
-//    // Une autre approche séquentiel pour l'algorithme
-//    int k=2;
-//    while (k*k<lMax){
-//        int i=k*k;
-//        while (i<lMax){
-//            lFlags[i]=1;
-//            i+=k;
-//        }
-//        do{
-//            k+=1;
-//        }while (lFlags[k]==1);
-//    }
+    // Une autre approche séquentiel pour l'algorithme
+    int k=2;
+    while (k*k<lMax){
+        int i=k*k;
+        while (i<lMax){
+            lFlags[i]=1;
+            i+=k;
+        }
+        do{
+            k+=1;
+        }while (lFlags[k]==1);
+    }
 
     // Arrêter le chronomètre
     lChrono.pause();

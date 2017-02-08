@@ -4,6 +4,7 @@ target
 cmake*
 CMakeFiles
 .settings
+.latex
 
 # Files to ignore
 **.iml
@@ -13,3 +14,5 @@ CMakeFiles
 Makefile
 CMakeCache.txt
 SourceFiles
+**.synctex.gz
+**.latex.json
