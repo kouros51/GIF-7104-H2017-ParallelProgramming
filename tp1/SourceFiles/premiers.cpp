@@ -11,6 +11,7 @@
 #include "Chrono.hpp"
 #include <math.h>
 
+
 #define THREADS_NUMBER  4
 // Global shared varianles
 char *gFlags;
@@ -23,7 +24,7 @@ pthread_t gIds[THREADS_NUMBER];
 pthread_mutex_t gCandidateLock = PTHREAD_MUTEX_INITIALIZER;
 
 // Method declaration
-void invalidate_pairs_number();
+void *invalidate_pairs_number(void *iArgs);
 
 void invalidate_multiple(unsigned long p);
 
@@ -47,35 +48,42 @@ int main(int argc, char *argv[]) {
     gFlags = (char *) calloc(gMax, sizeof(*gFlags));
     printf("l'adresse de l'allocation du tableau de flag est %ld \n", gFlags);
     assert(gFlags != 0);
+    int j = 0;
 
-    // Invalidate pair numbers as primes
-    invalidate_pairs_number();
+    
 
     gCandidate = 3;
 
     // create threads
-    printf("Starting threads\n");
-    for (int i = 1; i <= THREADS_NUMBER; ++i) {
-        printf("Starting thread number %d \n", i);
-        pthread_create(&gIds[i - 1], NULL, find_multiple, (void *) i);
+    //printf("Starting threads\n");
+    if (THREADS_NUMBER >1) {
+        for (int i = 1; i <= THREADS_NUMBER; ++i) {
+           // printf("Starting thread number %d \n", i);
+                // Invalidate pair numbers as primes
+            if (i ==1) pthread_create(&gIds[0], NULL, invalidate_pairs_number, (void*) j);
+                // Search for other primes
+            else pthread_create(&gIds[i - 1], NULL, find_multiple, (void *) i);
+        }
+    
+        // wait for thread completion
+        //printf("Joining threads\n");
+        for(int i=1; i<=THREADS_NUMBER; ++i) {
+            void **lWorkDone = NULL;
+            pthread_join(gIds[i - 1], lWorkDone);
+           // printf("Joining thread number %d \n", i);
+        }
+    }
+    else {
+    // Serial basic Sieve of Eratosthenes algorithm
+        for (unsigned long p = 2; p < gMax; p++) {
+            if (gFlags[p] == 0) {
+                // Invalidate all multiple of p
+                invalidate_multiple(p);
+            }
+        }
     }
 
-    // wait for thread completion
-    printf("Joining threads\n");
-    for(int i=1; i<=THREADS_NUMBER; ++i) {
-        void **lWorkDone = NULL;
-        pthread_join(gIds[i - 1], lWorkDone);
-        printf("Joining thread number %d \n", i);
-    }
 
-
-//    // Serial basic Sieve of Eratosthenes algorithm
-//    for (unsigned long p = 2; p < gMax; p++) {
-//        if (gFlags[p] == 0) {
-//            // Invalidate all multiple of p
-//            invalidate_multiple(p);
-//        }
-//    }
 
 
     // Stop Chronometer
@@ -98,10 +106,12 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void invalidate_pairs_number() {
+void *invalidate_pairs_number(void *iArgs) {
+    unsigned long  lPrimeWorkDone = 0;
     for (long i = 3; i < gMax; i++) {
         if (i % 2 == 0) gFlags[i]++;
     }
+    pthread_exit((void *) lPrimeWorkDone);
 }
 
 void invalidate_multiple(unsigned long p) {
@@ -121,7 +131,7 @@ void *find_multiple(void *iArg) {
         if (lCandidate <= lLimit) {
             if(!gFlags[lCandidate]){
                 invalidate_multiple(lCandidate);
-                lPrimeWorkDone++;
+                //lPrimeWorkDone++;
             }
         }else{
             pthread_exit((void *) lPrimeWorkDone);
