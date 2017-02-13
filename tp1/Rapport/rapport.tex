@@ -5,8 +5,11 @@
 \usepackage{float}
 \usepackage{array}
 \usepackage{tabularx}
+\usepackage [T1]{fontenc}
+\usepackage{xcolor}
 
-
+\def\code#1{\texttt{#1}} % pour écrire du code (police monospace)
+\def\comment#1{\color{gray} #1 \color{black}}
 
 \begin{document}
 \renewcommand{\labelitemi}{$\bullet$}
@@ -45,10 +48,65 @@ thierry.st-gelais.1@ulaval.ca\\
 \listoffigures
 \listoftables
 \newpage
-\chapter{premire chapitre}
+\chapter{Introduction}
 
-\section{Démarche suivie}
-La démarche a suivre.
-\subsection{test}
+	Le but de ce travail était réaliser une algorithme {\it multithread} (multifilaire)
+	ayant pour but de trouver les nombre premiers inférieurs à un seuil fixé.
+	Nous devions nous inspirer de l'algorithme du Crible d'Ératosthène.
+
+\newpage
+\chapter{Description de la méthode}
+
+	\section{Explication de l'algorithme}
+	
+		L'algorithme du Crible d'Ératosthène consiste à parcourir un tableau 
+		en ordre croissant, tout en éliminant successivement les multiples des 
+		nombres rencontrés du tableau, ou à les {\it flagger} (marquer) comme 
+		étant des nombres composés et donc, non-premiers.
+		
+	\bigskip		
+	\section{Parralélisation de l'algorithme}
+
+		Dans le cas présent, l'algorithme expliqué ci-haut est parralélisé de 
+		manière à ce que chaque fil d'exécution prenne en charge un nombre. 
+		Par exemple, si un premier fil s'occupe de tous les multiples de 2, 
+		alors le fil suivant marquera tous les multiples de 3, et cetera.
+		
+		\bigskip
+		\noindent ex.:
+		
+		\noindent
+		\code{
+			\comment{
+			1 étant un nombre premier par défaut, il est possible de \\l'ignorer 
+			dans l'élaboration du code suivant
+			} \\	
+			\\
+			lN: entier, \comment{un entier correspondant à la limite de recherche 
+			pour \\les nombres premiers}\\
+			lT: entier, \comment{un entier correspondant au nombre de fils 
+			d'exécution \\demandés} \\
+			\\
+			gCand: entier, \comment{Entier qui permet de déterminer les prochains
+			\\nombres à marquer} \\
+			\\
+			N[lN] = [0,0,0, $\ldots$ ,0]: char, \comment{Un tableau de {\it flags}} \\
+			\\
+			T[lT] = [null, null, $\ldots$ , null]: ptr, \comment{Tableau contenant 
+			des \\pointeurs vers les différents fils d'exécution} \\
+			\\
+			Pour (i=2..lT) \\
+			\hspace*{16pt} T[i] = créer\_Fil(exec\_Crible(gCand))
+		}
+		
+		\bigskip
+		Ici, les fonctions \code{creer\_Fil()} et \code{exec\_Crible()}
+		font exactement ce qu'elles prétendent: la première crée un nouveau fil 
+		d'exécution qui prendra en charge la fonction passée en paramètre.
+		
+		\smallskip
+		La seconde, elle, marque dans le tableau les multiples du nombre qui 
+		lui est passé en paramètre. 
+		
 
 \end{document}
