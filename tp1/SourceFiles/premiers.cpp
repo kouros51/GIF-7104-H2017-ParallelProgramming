@@ -31,6 +31,7 @@ void invalidate_multiple(unsigned long p);
 
 void *find_multiple(void *iArg);
 
+void serial_invalidate_pairs_number() ;
 
 int main(int argc, char *argv[]) {
 
@@ -48,8 +49,7 @@ int main(int argc, char *argv[]) {
         case 3:
             gMax = (unsigned long) atol(argv[1]);
             gThreadsNumbers = atoi(argv[2]);
-            gAlgoType = (gThreadsNumbers==1? 0 : 1);
-
+            gAlgoType = (gThreadsNumbers == 1 ? 0 : 1);
             break;
         default:
             // If no argument or wrong argument chain given then,
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
             gThreadsNumbers = DEFAULT_THREADS_NUMBER;
             printf("No arguments Given:\n"
                            "Default limit is %ld;\n"
-                           "Default mode is sequential.\n",gMax);
+                           "Default mode is sequential.\n", gMax);
     }
 
     // Start chronometer
@@ -97,6 +97,7 @@ int main(int argc, char *argv[]) {
         }
     } else {
         // Serial basic Sieve of Eratosthenes algorithm
+        serial_invalidate_pairs_number();
         for (unsigned long p = 2; p < gMax; p++) {
             if (gFlags[p] == 0) {
                 // Invalidate all multiple of p
@@ -125,6 +126,12 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Temps d'execution = %f sec.\n", lChrono.get());
     fprintf(stderr, "________________________\n");
     return 0;
+}
+
+void serial_invalidate_pairs_number() {
+    for (unsigned long i = 4; i < gMax; i += 2) {
+        gFlags[i]++;
+    }
 }
 
 void *invalidate_pairs_number(void *) {
