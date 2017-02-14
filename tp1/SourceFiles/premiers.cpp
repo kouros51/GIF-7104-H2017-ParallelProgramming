@@ -105,8 +105,8 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
     printf("Le nombre des nombre primaires est %i \n", gCount);
+    printf("Temps d'execution = %f sec\n", lChrono.get());
     // Output in the stderr the execution time
-    fprintf(stderr, "\n");
     fprintf(stderr, "Temps d'execution = %f sec\n", lChrono.get());
 
     return 0;
