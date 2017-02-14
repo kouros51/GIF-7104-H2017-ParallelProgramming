@@ -12,7 +12,7 @@
 #include <math.h>
 
 
-#define DEFAULT_THREADS_NUMBER  2
+#define DEFAULT_THREADS_NUMBER  1
 // Global shared varianles
 char *gFlags;
 unsigned long gMax, gCandidate;
@@ -120,8 +120,10 @@ int main(int argc, char *argv[]) {
     printf("Le nombre des nombre primaires est %i \n", gCount);
     printf("Temps d'execution = %f sec\n", lChrono.get());
     // Output in the stderr the execution time
-    fprintf(stderr, "Temps d'execution = %f sec\n", lChrono.get());
-
+    fprintf(stderr, "Limit = %ld;\n", gMax);
+    fprintf(stderr, "Number of threads = %i threads;\n", gThreadsNumbers);
+    fprintf(stderr, "Temps d'execution = %f sec.\n", lChrono.get());
+    fprintf(stderr, "________________________\n");
     return 0;
 }
 
