@@ -36,9 +36,10 @@ void serial_invalidate_pairs_number() ;
 int main(int argc, char *argv[]) {
 
 
-    // First argument is the limit, the second is the mode of runner (sequential or parallel),
-    // and the third is the number of threads to use.
-    // Execute the program: ./Primes [limit] [1|seq] [nthreads]
+    // First argument is the limit, the second is the number of threads.
+    // Execute the program: ./Primes [limit] [nthreads]
+    // If the nthreads = 1, it will run in sequential mode.
+    // Otherwise, it will run in parallel mode with nthreads number of threads.
     switch (argc) {
         case 2:
             gMax = (unsigned long) atol(argv[1]);
