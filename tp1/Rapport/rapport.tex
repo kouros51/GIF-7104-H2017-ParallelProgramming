@@ -68,13 +68,22 @@ thierry.st-gelais.1@ulaval.ca\\
 		en ordre croissant, tout en éliminant successivement les multiples des
 		nombres rencontrés du tableau, ou à les {\it flagger} (marquer) comme
 		étant des nombres composés et donc, non-premiers.
+	\section{Présenatation sommaire de la démarche suivie}
+		Dans notre approche du problème, nous avons avant toute chose déléguer l'élimination des nombres paire à
+		une fonction. Cette optimization est prise en compte même dans le cas de l'algorithme séquentiel.
+		Ensuite, nous avons confié à chaque fil d'éxécution les tâche suivantes:
+		\begin{itemize}
+			\item Considérer une variable partagée qui reflète le condidat "nombre premier".
+			\item Acquérir ce condidat, et changer cette valeur partagé pour les fils qui vont suivre.
+			\item Utilser un mecanisme de mutex lors du changement du condidant pour éviter les courses critiques.
+			\item Invalider (flagger) tous les multiples de ce condidat acquis.
+		\end{itemize}
 	\bigskip
 	\section{Parralélisation de l'algorithme}
-
 		Dans le cas présent, l'algorithme expliqué ci-haut est parralélisé de
 		manière à ce que chaque fil d'exécution prenne en charge un nombre.
 		Par exemple, si un premier fil s'occupe de tous les multiples de 2,
-		alors le fil suivant marquera tous les multiples de 3, et cetera.
+		alors le fil suivant marquera tous les multiples de 3, etc\ldots
 
 		\bigskip
 		\noindent ex.:
@@ -111,6 +120,7 @@ thierry.st-gelais.1@ulaval.ca\\
 		\smallskip
 		La seconde, elle, marque dans le tableau les multiples du nombre qui
 		lui est passé en paramètre.
+
 
 \chapter{Expérimenations et résultats}
 \section{Protocole d'éxpérimentation}
@@ -319,5 +329,9 @@ suivantes:
 	de lecture à faire, donc pas de possibilité d'interférence.
 	
 \chapter{Conclusion}
-
+Ce travail pratique nous a permis de faire des exéprimentaions afin de parralléliser l'algorithme du Crible d'Ératosthène.
+Les résultats obtenus nous ont montré tous les bénéfice qu'on peut tirer de parralléliser un algorithme en terme de rapitdé
+d'éxécution et d'éfficacité.
+Cependant, Malgré nos résultats que nous considérons trés bons, nous n'avions pas les connaissances nécessaires ou le temps suffisant
+pour apprendre les subtilités qui s'offrent à nous en terme d'utilisation des options d'optimisation du compilateur.
 \end{document}
