@@ -12,16 +12,16 @@
 #include <math.h>
 
 
-#define THREADS_NUMBER  5
+#define DEFAULT_THREADS_NUMBER  2
 // Global shared varianles
 char *gFlags;
 unsigned long gMax, gCandidate;
-int gCount, gAlgoType =0;
-pthread_t gIds[THREADS_NUMBER];
+int gCount, gAlgoType = 0;
+int gThreadsNumbers;
+
 
 // Initialization Mutex
 pthread_mutex_t gCandidateLock = PTHREAD_MUTEX_INITIALIZER;
-
 
 
 // Method declaration
@@ -33,22 +33,42 @@ void *find_multiple(void *iArg);
 
 
 int main(int argc, char *argv[]) {
-    // If no argument given then,
-    // the minimal default search limit is 1000
-    gMax = 1000;
+
+
+    // First argument is the limit, the second is the mode of runner (sequential or parallel),
+    // and the third is the number of threads to use.
+    // Execute the program: ./Primes [limit] [1|seq] [nthreads]
     switch (argc) {
         case 2:
             gMax = (unsigned long) atol(argv[1]);
-            printf("No type of algorithm given, the program will run in sequential mode.\n");
+            gThreadsNumbers = DEFAULT_THREADS_NUMBER;
+            printf("No type of algorithm given, the program will run in sequential mode.\n"
+                           "The default number of threads is %i.\n", gThreadsNumbers);
             break;
         case 3:
             gMax = (unsigned long) atol(argv[1]);
             gAlgoType = atoi(argv[2]);
+            if (gAlgoType==1){
+                gThreadsNumbers = DEFAULT_THREADS_NUMBER;
+                printf("No threads number argument, the default number of threads is %i.\n",gThreadsNumbers);
+            }else{
+                printf("AlgoType is different from 1. Sequential mode is on\n");
+            }
+            break;
+        case 4:
+            gMax = (unsigned long) atol(argv[1]);
+            gAlgoType = atoi(argv[2]);
+            gThreadsNumbers = atoi(argv[3]);
             break;
         default:
-            printf("No arguments Given:"
+            // If no argument or wrong argument chain given then,
+            // the minimal default search limit is 1000
+            // the default number of threads is defined by macro DEFAULT_THREADS_NUMBER
+            gMax = 1000;
+            gThreadsNumbers = DEFAULT_THREADS_NUMBER;
+            printf("No arguments Given:\n"
                            "Default limit is %ld;\n"
-                           "Default mode is sequential.\n", gMax);
+                           "Default mode is sequential.\n",gMax);
     }
 
     // Start chronometer
@@ -63,24 +83,25 @@ int main(int argc, char *argv[]) {
     gCandidate = 3;
 
     // create threads
+    pthread_t lIds[gThreadsNumbers];
     //printf("Starting threads\n");
     if (gAlgoType == 1) {
-        for (int i = 1; i <= THREADS_NUMBER; i++) {
+        for (int i = 1; i <= gThreadsNumbers; i++) {
             // printf("Starting thread number %d \n", i);
             if (i == 1) {
                 // Invalidate pair numbers as primes
-                pthread_create(&gIds[0], NULL, invalidate_pairs_number, NULL);
+                pthread_create(&lIds[0], NULL, invalidate_pairs_number, NULL);
             } else {
                 // Search for other primes in non-pairs numbers
-                pthread_create(&gIds[i - 1], NULL, find_multiple, NULL);
+                pthread_create(&lIds[i - 1], NULL, find_multiple, NULL);
             }
 
         }
 
         // wait for thread completion
         //printf("Joining threads\n");
-        for (int i = 1; i <= THREADS_NUMBER; i++) {
-            pthread_join(gIds[i - 1], NULL);
+        for (int i = 1; i <= gThreadsNumbers; i++) {
+            pthread_join(lIds[i - 1], NULL);
 //            printf("Joining thread number %d \n", i);
         }
     } else {
@@ -99,6 +120,7 @@ int main(int argc, char *argv[]) {
     // Count primes numbers and output them on the console
     for (unsigned long p = 2; p < gMax; p++) {
         if (gFlags[p] == 0) {
+            // Limit printing result to the 100 first results, for console output limit
             if (gCount < 100)printf("%ld ", p);
             gCount += 1;
         }
