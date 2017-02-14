@@ -47,18 +47,9 @@ int main(int argc, char *argv[]) {
             break;
         case 3:
             gMax = (unsigned long) atol(argv[1]);
-            gAlgoType = atoi(argv[2]);
-            if (gAlgoType==1){
-                gThreadsNumbers = DEFAULT_THREADS_NUMBER;
-                printf("No threads number argument, the default number of threads is %i.\n",gThreadsNumbers);
-            }else{
-                printf("AlgoType is different from 1. Sequential mode is on\n");
-            }
-            break;
-        case 4:
-            gMax = (unsigned long) atol(argv[1]);
-            gAlgoType = atoi(argv[2]);
-            gThreadsNumbers = atoi(argv[3]);
+            gThreadsNumbers = atoi(argv[2]);
+            gAlgoType = (gThreadsNumbers==1? 0 : 1);
+
             break;
         default:
             // If no argument or wrong argument chain given then,
