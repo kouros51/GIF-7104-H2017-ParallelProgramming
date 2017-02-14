@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
     // First argument is the limit, the second is the number of threads.
     // Execute the program: ./Primes [limit] [nthreads]
     // If the nthreads = 1, it will run in sequential mode.
+    // If the nthreads is absent, it will take DEFAULT_THREADS_NUMBER as number of threads.
     // Otherwise, it will run in parallel mode with nthreads number of threads.
     switch (argc) {
         case 2:
