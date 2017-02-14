@@ -124,14 +124,15 @@ Nous avons défini dans un script bash le protocole d'éxpériementation suivant
 	C'est à dire, indépendament de la version de l'algoritmhe nous avons fais des tests selon les limites suivantes:
 	\begin{itemize}
 		\item $10^{9}$
-		\item $10^{9}/2=500\times10^{6}$
-		\item $10^{9}/3=333\times10^{6}$
-		\item $10^{9}/4=250\times10^{6}$
-		\item $10^{9}/5=200\times10^{6}$
+		\item $10^{9}/2=5\times10^{8}$
+		\item $10^{9}/3=3\times10^{8}$
+		\item $10^{9}/4=2.50\times10^{8}$
+		\item $10^{9}/5=2\times10^{8}$
 	\end{itemize}
 	\item Nous avons observé par la suite les résultats obtenus en terme de temps d'éxécution.
 	\item Nous avons compilé c'est résultat dans des tableaux comapratifs et dans des graphes.
 \end{itemize}
+\newpage
 \section{Résultats:}
 Nous vous présentons dans une première phase les résultats sous la forme de tableaux
 comparatifs:
@@ -270,7 +271,53 @@ suivantes:
 	\end{figure}
 \end{center}
 \section{Interprétation}
-
+	Comme le démontrent nos résultats, on peut voir un plafonnement rapide 
+	de l'amélioration apportée par la parallélisation de l'algorithme. Par 
+	exemple, pour 1 milliard de nombres, on voit qu'a $\sim 4.50$ secondes 
+	pour 5 fils, le programme plafonne et ralentit à 6 fils. Cela peut être 
+	dû au fait que les tests ont été réalisés sur un ordinateur dont le 
+	processeur n'a que 4 coeurs.
+	
+	\smallskip	
+	De plus, il est possible de voir que l'efficacité diminue selon le 
+	nombre de fils et que le speedup, lui, augmente de plus en plus lentement. 
+	Ce sont d'autres indicateurs du plafonnement de notre parallélisation.
+	
+	\bigskip
+	Somme toute, notre meilleur résultat est obtenu lors de l'utilisation de 
+	5 fils d'exécution pour 1 milliard de nombre, soit un speedup de $\sim 3.72$ 
+	et une efficacité de $\sim 0.74$.
+	
+	\bigskip
+	Il est possible, toutefois, d'appercevoir dans les graphiques et les tableaux 
+	précédents certaines anomalies: des valeurs de speedup plus grandes que le 
+	nombre de fils d'exécution utilisés, ainsi que des valeurs d'efficacité plus 
+	grandes que 1.
+	
+	\smallskip
+	Nous somme d'avis que ces valeurs sont dûes à de petites variation dans la 
+	vitesse de traitement du processeur	pendant le test. L'erreur dans ces cas 
+	est de l'ordre de $\sim 9\%$ au maximum, dans les cas avec les plus petit 
+	nombre de valeurs à traiter. 
+	
+	Pour 1 milliard de nombres, l'erreur se situe à $\sim 3\%$.
+	
+	\bigskip
+	Nous avons tenté de rendre les fils d'exécution les plus indépendants 
+	possible les uns des autres. Pour ce faire, chaque fil fait le traitement 
+	du tableau en entier, en marquant les multiples d'un nombre donné en entrée. 
+	Dès que celui-ci a terminé, il prends le prochain nombre disponible afin de 
+	continuer le traitement sans interruption.
+	
+	\smallskip
+	De plus, nous avons minimisé l'usage de mutex. Nous n'en utilisons qu'un seul 
+	dans le programme, au moment de modifier le prochain nombre à traiter. C'est le 
+	seul moment dans notre programme où il y aurait pu y avoir interférence entre 
+	une lecture et une écriture, donc nous avons appliqué un mutex. Pour marquer les 
+	nombre comme composés dans le tableau, nous incrémentons la valeur, donc même 
+	si dans le cas où 2 fils voudraient l'incrémenter en même temps, il n'y a pas 
+	de lecture à faire, donc pas de possibilité d'interférence.
+	
 \chapter{Conclusion}
 
 \end{document}
