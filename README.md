@@ -13,11 +13,11 @@ For more details about the code, clone the repository in the SourceFile subfolde
 and run the command:
 
 ```bash
-$cmake .
+$ cmake .
 ```
 then the command
 ```bash
-$make
+$ make
 ```
 You will have an executable, run it with this command:
 ```bash
