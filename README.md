@@ -4,13 +4,16 @@
 In this this assignment we were asked to begin with a sequential version
 of the algorithm and to parallelize it using the "pthread" library in C.
 
-We have produce a rapport that details all the steps that we made to accomplish that
+We have produced a rapport that details all the steps that we made to accomplish that
 task and produce the results we wanted.
 
-For more details clone the repository than  in the SourceFile folder run the two
+For more details, clone the repository in the SourceFile folder run the two
 commands:
 
 ```C
 cmake .
+```
+then run
+```C
 make
 ```
