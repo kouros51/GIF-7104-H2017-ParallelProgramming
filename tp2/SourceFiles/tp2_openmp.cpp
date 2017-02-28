@@ -16,7 +16,7 @@
 #include "Chrono.hpp"
 #include "PACC/Tokenizer.hpp"
 
-#define MAX_THREADS 4
+#define MAX_THREADS 8
 
 using namespace std;
 
@@ -92,7 +92,7 @@ int main(int inArgc, char *inArgv[]) {
         #pragma omp parallel shared (lHalfK, lWidth, lHeight, lImage) private (lR, lG, lB) num_threads(t)
         {
             //cout << "This is Thread: " << omp_get_thread_num() << endl; 
-                #pragma omp for schedule(static)
+                #pragma omp for schedule(static) collapse(2)
                 for (int x = lHalfK; x < (int) lWidth - lHalfK; x++) {
                     for (int y = lHalfK; y < (int) lHeight - lHalfK; y++) {
                         lR = 0.;

@@ -59,11 +59,18 @@ thierry.st-gelais.1@ulaval.ca\\
 Dans ce deuxième travail pratique, nous avons été amener à paralléliser un algorithme
 de filtrage numérique basé sur des opérations de convolution. Nous avons utilisée OpenMP
 pour effectuer cette tache.
-\chapter{Description générale de l'algorithme}
-sur les pixels d'une image en entrée pour produire une image en output.
-Cette operation de convulution est applique selon un noyeau ( un noyau flou ou un noyau identite).
-\chapter{Approche adoptée pour la parallélisation }
-\chapter{Expérimentations et résultats}
+\chapter{Réalisation du travail pratique}
+\section{Description générale de l'algorithme}
+L'algorithme de filtrage se base principalement sur des opérations de convolution entre matrices
+ sur les pixels d'une image en entrée pour produire une image en output.\\
+Cette opération de convolution est applique selon un noyau (un noyau flou ou un noyau identité).
+\section{Approche adoptée pour la parallélisation }
+Dans notre approche du problème, nous avons choisi de paralléliser les deux premières
+boucles imbriquées, en utilisant la clause "collapse".\\
+Nous avons aussi choisi la stratégie statique pour la distribution des blocs de traitement
+que chaque "thread" devera exécuter. Nous avons aussi défini aussi les variables \it{lR, lG, lB} 
+comme étant des variables privées à chacun thread pour le calcul de la convolution.
+\section{Expérimentations et résultats}
 \chapter{Conclusion}
 
 \end{document}
