@@ -71,29 +71,44 @@ Nous avons aussi choisi la stratégie statique pour la distribution des blocs de
 que chaque "thread" devera exécuter. Nous avons aussi défini aussi les variables {\it lR, lG, lB} 
 comme étant des variables privées à chacun thread pour le calcul de la convolution.
 \section{Expérimentations et résultats}
-Suite à plusieurs expérimentations, nous en sommes arrivés aux résultats présentés sur les graphiques suivants:
+\subsection{Protocole d'expérimentation}
+Pour nos expérimentations, nous avons choisi:
+\begin{itemize}
+	\item Une image plus significative en matière de nombre de pixels;
+	\item Répéter le filtrage plusieurs fois d'affilée.
+\end{itemize}
+Ces choix nous permettent des mesures de performance en secondes plus
+tot que des mesures en mellisecondes.
+
+\subsection{Résultats}
+
+\bigskip Suite à plusieurs expérimentations, nous en sommes arrivés aux résultats présentés sur les graphiques suivants:
 
 \begin{center}
 	\begin{figure}[H]
-		\includegraphics[scale=0.6]{Images/graph_temps.png}
+		\includegraphics[scale=0.55]{Images/graph_temps.png}
 		\caption{Temps d'exécution selon le nombre de fils pour un nombre donné d'exécutions}
 	\end{figure}
 
 	\begin{figure}[H]
-		\includegraphics[scale=0.6]{Images/graph_speedup.png}
+		\includegraphics[scale=0.55]{Images/graph_speedup.png}
 		\caption{Speedup selon le nombre de fils pour un nombre donné d'exécutions}
 	\end{figure}
 
 	\begin{figure}[H]
-		\includegraphics[scale=0.6]{Images/graph_eff.png}
+		\includegraphics[scale=0.55]{Images/graph_eff.png}
 		\caption{Efficacité selon le nombre de fils pour un nombre donné d'exécutions}
 	\end{figure}
 \end{center}
+
+\subsection{Interprétation}
 
 Ce que les trois graphiques précédent nous apprennent, c'est que notre algorithme voit son efficacité baisser assez rapidement selon le nombre de threads associées au processus. En effet, les courbes semblment montrer un plafonnement assez rapide de la diminution du temps d'exécution, ce qui ammène par le fait même un plafonnement du speedup et un plancher de l'efficacité de l'algorithme. Les tests effectués montrent un speedup maximal d'environ $2.5$ pour $X$ threads, bien que ceci ne soit pas démontré dans les graphiques. On obtient à ce moment une efficacité d'environ $0.313$. 
 
 \bigskip Ces chiffres, quant à eux, nous portent à croire que l'algorithme est peu parallélisable, ce qui expliquerait le speedup et l'efficacité faibles.
 
 \chapter{Conclusion}
-
+Dans ce travail, nous avons essayé d'explorer ce qu'OpenMP offrait comme possibilités pour
+paralléliser principalement des boucles, afin d'accélérer les calculs applique au filtrage
+numérique d'image.
 \end{document}
