@@ -68,9 +68,17 @@ Cette opération de convolution est applique selon un noyau (un noyau flou ou un
 Dans notre approche du problème, nous avons choisi de paralléliser les deux premières
 boucles imbriquées, en utilisant la clause "collapse".\\
 Nous avons aussi choisi la stratégie statique pour la distribution des blocs de traitement
-que chaque "thread" devera exécuter. Nous avons aussi défini aussi les variables \it{lR, lG, lB} 
+que chaque "Thread" devera exécuter. Nous avons aussi défini aussi les variables \textit{lR, lG, lB}
 comme étant des variables privées à chacun thread pour le calcul de la convolution.
 \section{Expérimentations et résultats}
+Pour nos expérimentations, nous avons choisi:
+\begin{itemize}
+	\item Une image plus significative en matière de nombre de pixels;
+	\item Répéter le filtrage plusieurs fois d'affilée.
+\end{itemize}
+Ces choix nous permettent des mesures de performance en secondes plus
+tot que des mesures en mellisecondes.
+
 \chapter{Conclusion}
 
 \end{document}
