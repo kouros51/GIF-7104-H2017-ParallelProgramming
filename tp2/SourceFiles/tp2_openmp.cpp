@@ -84,18 +84,21 @@ int main(int inArgc, char *inArgv[]) {
     double lR, lG, lB;
 
     for (int t = 1; t <= MAX_THREADS; t++) {
-        omp_set_num_threads(t);
+        //omp_set_num_threads(t);
         cout << "For " << t << " Threads:" << endl;
         lChrono.reset();
+        lChrono.resume();
         for (int i = 1; i <= 10; i++) {
-        #pragma omp parallel
-            {
-                #pragma omp parallel for collapse(2)
+        #pragma omp parallel shared (lHalfK, lWidth, lHeight, lImage) private (lR, lG, lB) num_threads(t)
+        {
+            //cout << "This is Thread: " << omp_get_thread_num() << endl; 
+                #pragma omp for schedule(static)
                 for (int x = lHalfK; x < (int) lWidth - lHalfK; x++) {
                     for (int y = lHalfK; y < (int) lHeight - lHalfK; y++) {
                         lR = 0.;
                         lG = 0.;
                         lB = 0.;
+                        //#pragma omp for schedule(static)
                         for (int j = -lHalfK; j <= lHalfK; j++) {
                             fy = j + lHalfK;
                             for (int i = -lHalfK; i <= lHalfK; i++) {
@@ -114,6 +117,7 @@ int main(int inArgc, char *inArgv[]) {
                 }
             }
         }
+        lChrono.pause();
         fprintf(stderr, "Temps d'execution = %f sec.\n", lChrono.get());
     }
 
