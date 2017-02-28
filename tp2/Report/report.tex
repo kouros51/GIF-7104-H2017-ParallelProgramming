@@ -71,6 +71,7 @@ Nous avons aussi choisi la stratégie statique pour la distribution des blocs de
 que chaque "Thread" devera exécuter. Nous avons aussi défini aussi les variables \textit{lR, lG, lB}
 comme étant des variables privées à chacun thread pour le calcul de la convolution.
 \section{Expérimentations et résultats}
+\subsection{Protocol d'expérimentation}
 Pour nos expérimentations, nous avons choisi:
 \begin{itemize}
 	\item Une image plus significative en matière de nombre de pixels;
@@ -78,7 +79,11 @@ Pour nos expérimentations, nous avons choisi:
 \end{itemize}
 Ces choix nous permettent des mesures de performance en secondes plus
 tot que des mesures en mellisecondes.
+\subsection{Résultats}
+\subsection{Interprétation}
 
 \chapter{Conclusion}
-
+Dans ce travail, nous avons essayé d'explorer ce qu'OpenMP offrait comme possibilités pour
+paralléliser principalement des boucles, afin d'accélérer les calculs applique au filtrage
+numérique d'image.
 \end{document}
