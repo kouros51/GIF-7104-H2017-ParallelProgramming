@@ -50,30 +50,75 @@ void encode(const char* inFilename, vector<unsigned char>& inImage, unsigned int
         cout << "Erreur d'encodage " << lError << ": "<< lodepng_error_text(lError) << endl;
 }
 
-const int ELEMENTS = 2048;
 
 int main(int inArgc, char *inArgv[])
 {
-    
     cout<< "Running Image Filtering Program"<<endl<<endl;
     
-    size_t datasize = sizeof(int)*ELEMENTS;
-    
-    int *A, *B;
-    int *C;
-    
-    A = (int*)malloc(datasize);
-    B = (int*)malloc(datasize);
-    C = (int*)malloc(datasize);
-    if (A==NULL || B==NULL || C==NULL) {
-        cerr<<"Momery allocation";
+    if(inArgc < 3 or inArgc > 4) usage(inArgv[0]);
+    string lFilename = inArgv[1];
+    string lOutFilename;
+    if (inArgc == 4)
+        lOutFilename = inArgv[3];
+    else
+        lOutFilename = "output.png";
+
+    // Lire le noyau.
+    ifstream lConfig;
+    lConfig.open(inArgv[2]);
+    if (!lConfig.is_open()) {
+        cerr << "Le fichier noyau fourni (" << inArgv[2] << ") est invalide." << endl;
         exit(-1);
     }
     
-    for (int i = 0; i< ELEMENTS ; i++) {
-        A[i] = i;
-        B[i] = i;
+    PACC::Tokenizer lTok(lConfig);
+    lTok.setDelimiters(" \n","");
+        
+    string lToken;
+    lTok.getNextToken(lToken);
+    
+    int lK = atoi(lToken.c_str());
+    int lHalfK = lK/2;
+    
+    cout << "Taille du noyau: " <<  lK << endl;
+    
+    //Lecture de l'image
+    //Variables à remplir
+    unsigned int lWidth, lHeight; 
+    vector<unsigned char> lImage; //Les pixels bruts
+    vector<unsigned char> lOutput(lHeight*lWidth);
+
+    //Appeler lodepng
+    decode(lFilename.c_str(), lImage, lWidth, lHeight);
+        
+    unsigned char *A;
+    double *B;
+    unsigned char *C;
+    
+    unsigned int sizeOfImage = sizeof(char)* lWidth * lHeight;
+    unsigned int sizeOfFilter = sizeof(double) * lK * lK;
+    
+    A = (unsigned char*)malloc(sizeOfImage);
+    B = (double*)malloc(sizeOfFilter);
+    C = (unsigned char*)malloc(sizeOfImage);
+    if (A==NULL || B==NULL || C==NULL) {
+        cerr<<"Memory allocation";
+        exit(-1);
     }
+    
+        //Lecture du filtre
+    
+    for (unsigned int i = 0; i < lImage.size();i++) {
+        A[i] = lImage[i];
+    }
+        
+    for (int i = 0; i < lK; i++) {
+        for (int j = 0; j < lK; j++) {
+            lTok.getNextToken(lToken);
+            B[i*lK+j] = atof(lToken.c_str());
+        }
+    }
+    
     
     cl_int status;
     
@@ -194,20 +239,20 @@ int main(int inArgc, char *inArgv[])
     cl_mem d_C;
     
     d_A = clCreateBuffer(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,
-            datasize,A,&status);
+            sizeof(char)*lWidth*lHeight,A,&status);
     if (status != CL_SUCCESS || d_A == NULL) {
         cout<<"clCreateBuffer failed!"<<endl;
         exit(-1);
     }
     
     d_B = clCreateBuffer(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,
-            datasize,B,&status);
+            sizeof(double)*lK*lK,B,&status);
     if (status != CL_SUCCESS || d_B == NULL) {
         cout<<"clCreateBuffer failed!"<<endl;
         exit(-1);
     }
     
-    d_C = clCreateBuffer(context, CL_MEM_READ_WRITE,datasize,NULL,&status);
+    d_C = clCreateBuffer(context, CL_MEM_READ_WRITE,sizeof(char)*lWidth*lHeight,NULL,&status);
     if (status != CL_SUCCESS || d_C == NULL) {
         cout<<"clCreateBuffer failed!"<<endl;
         exit(-1);
@@ -301,7 +346,7 @@ int main(int inArgc, char *inArgv[])
     }
     
     size_t globalWorkSize[1];
-    globalWorkSize[0] = ELEMENTS;
+    globalWorkSize[0] = sizeOfImage;
     
     status = clEnqueueNDRangeKernel(cmdQueue, kernel, 1, NULL, globalWorkSize, 
             NULL, 0, NULL, NULL);
@@ -310,11 +355,11 @@ int main(int inArgc, char *inArgv[])
         exit(-1);
     }
     
-    clEnqueueReadBuffer(cmdQueue, d_C, CL_TRUE, 0, datasize, C, 0, NULL, NULL);
+    clEnqueueReadBuffer(cmdQueue, d_C, CL_TRUE, 0, sizeOfImage, C, 0, NULL, NULL);
     
     bool result = true;
     
-    for (int i = 0; i < ELEMENTS; i++) {
+    for (unsigned int i = 0; i < sizeOfImage; i++) {
         if (C[i] != i+i) {
             result = false;
             break;
@@ -326,51 +371,11 @@ int main(int inArgc, char *inArgv[])
     else {
         cout<<"Output is incorrect"<<endl;
     }
-//    if(inArgc < 3 or inArgc > 4) usage(inArgv[0]);
-//    string lFilename = inArgv[1];
-//    string lOutFilename;
-//    if (inArgc == 4)
-//        lOutFilename = inArgv[3];
-//    else
-//        lOutFilename = "output.png";
+
 //
-//    // Lire le noyau.
-//    ifstream lConfig;
-//    lConfig.open(inArgv[2]);
-//    if (!lConfig.is_open()) {
-//        cerr << "Le fichier noyau fourni (" << inArgv[2] << ") est invalide." << endl;
-//        exit(1);
-//    }
+
 //    
-//    PACC::Tokenizer lTok(lConfig);
-//    lTok.setDelimiters(" \n","");
-//        
-//    string lToken;
-//    lTok.getNextToken(lToken);
-//    
-//    int lK = atoi(lToken.c_str());
-//    int lHalfK = lK/2;
-//    
-//    cout << "Taille du noyau: " <<  lK << endl;
-//    
-//    //Lecture du filtre
-//    double* lFilter = new double[lK*lK];
-//        
-//    for (int i = 0; i < lK; i++) {
-//        for (int j = 0; j < lK; j++) {
-//            lTok.getNextToken(lToken);
-//            lFilter[i*lK+j] = atof(lToken.c_str());
-//        }
-//    }
-//
-//    //Lecture de l'image
-//    //Variables à remplir
-//    unsigned int lWidth, lHeight; 
-//    vector<unsigned char> lImage; //Les pixels bruts
-//    //Appeler lodepng
-//    decode(lFilename.c_str(), lImage, lWidth, lHeight);
-//    
-//    //Variables contenant des indices
+//    /Variables contenant des indices
 //    int fy, fx;
 //    //Variables temporaires pour les canaux de l'image
 //    double lR, lG, lB;
@@ -398,12 +403,19 @@ int main(int inArgc, char *inArgv[])
 //        }
 //    }
 //    
-//    //Sauvegarde de l'image dans un fichier sortie
-//    encode(lOutFilename.c_str(),  lImage, lWidth, lHeight);
+
 //
 //    cout << "L'image a été filtrée et enregistrée dans " << lOutFilename << " avec succès!" << endl;
 //
 //    delete lFilter;
+    
+    
+    //Sauvegarde de l'image dans un fichier sortie
+    for (unsigned int i=0; i< (lWidth*lHeight);i++) {
+        lOutput[i] = C[i];
+    }
+    
+    encode(lOutFilename.c_str(),  lOutput, lWidth, lHeight);
     
     clReleaseKernel(kernel);
     clReleaseProgram(program);
