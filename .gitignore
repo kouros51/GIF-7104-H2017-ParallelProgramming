@@ -5,12 +5,14 @@ cmake*
 CMakeFiles
 .settings
 .latex
+nbproject
 
 # Files to ignore
 **.iml
 **.project
 **.classpath
 **.cmake
+**.o
 Makefile
 CMakeCache.txt
 SourceFiles
