@@ -267,7 +267,7 @@ int main(int inArgc, char *inArgv[])
                     NULL, &buildLogSize);
             buildLog = (char*) malloc(sizeof(buildLogSize));
             if (buildLog == NULL) {
-                cerr<<"Momery Allocation";
+                cerr<<"Memory Allocation";
                 exit(-1);
             }
             clGetProgramBuildInfo(program, devices[i], CL_PROGRAM_BUILD_LOG,
@@ -284,7 +284,48 @@ int main(int inArgc, char *inArgv[])
         cout << "No build errors"<<endl;
     }
     
+    cl_kernel kernel;
     
+    kernel = clCreateKernel(program, "imgfilter", &status);
+    if (status != CL_SUCCESS) {
+        cout << "clCreatekernel failed!"<<endl;
+        exit(-1);
+    }
+    
+    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &d_A);
+    status |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &d_B);
+    status |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &d_C);
+    if (status != CL_SUCCESS) {
+        cout<<"clSetKernelArg failed!"<<endl;
+        exit(-1);
+    }
+    
+    size_t globalWorkSize[1];
+    globalWorkSize[0] = ELEMENTS;
+    
+    status = clEnqueueNDRangeKernel(cmdQueue, kernel, 1, NULL, globalWorkSize, 
+            NULL, 0, NULL, NULL);
+    if(status!=CL_SUCCESS) {
+        cout<<"clEnqueueNDRangeKernel failed!" <<endl;
+        exit(-1);
+    }
+    
+    clEnqueueReadBuffer(cmdQueue, d_C, CL_TRUE, 0, datasize, C, 0, NULL, NULL);
+    
+    bool result = true;
+    
+    for (int i = 0; i < ELEMENTS; i++) {
+        if (C[i] != i+i) {
+            result = false;
+            break;
+        }
+    }
+    if (result) {
+        cout << "Output is correct!"<<endl;
+    }
+    else {
+        cout<<"Output is incorrect"<<endl;
+    }
 //    if(inArgc < 3 or inArgc > 4) usage(inArgv[0]);
 //    string lFilename = inArgv[1];
 //    string lOutFilename;
@@ -364,6 +405,7 @@ int main(int inArgc, char *inArgv[])
 //
 //    delete lFilter;
     
+    clReleaseKernel(kernel);
     clReleaseProgram(program);
     clReleaseCommandQueue(cmdQueue);
     clReleaseMemObject(d_A);
