@@ -12,7 +12,9 @@
 #include <stdlib.h>
 #include <fstream>
 
-#include "Chrono.hpp"
+//#include "Chrono.hpp"
+
+#include <CL/cl.h>
 #include "PACC/Tokenizer.hpp"
 
 using namespace std;
@@ -50,6 +52,46 @@ void encode(const char* inFilename, vector<unsigned char>& inImage, unsigned int
 
 int main(int inArgc, char *inArgv[])
 {
+    cl_int status;
+    
+    cl_uint numPlatforms = 0;
+    
+    cl_platform_id *platforms;
+    
+    status = clGetPlatformIDs(0, NULL, &numPlatforms);
+    
+    if(status != CL_SUCCESS) {
+        printf("clGetPlatformIDs failed\n");
+        exit(-1);
+    }
+    
+    if(numPlatforms == 0) {
+        printf("No platforms detected \n");
+        exit(-1);
+    }
+    
+    platforms = (cl_platform_id*)malloc(numPlatforms*sizeof(cl_platform_id));
+    
+    if (platforms == NULL) {
+        perror("Memory allocation");
+        exit(-1);
+    }
+    
+    clGetPlatformIDs(numPlatforms, platforms, NULL);
+    if (status != CL_SUCCESS) {
+        cout << "clGetPlatformIDs failed!" <<endl;
+        exit(-1);
+    }
+    
+    cout << numPlatforms << " platforms detected" << endl;
+    
+    for(unsigned int i = 0; i< numPlatforms; i++) {
+        char buf[100];
+        cout << "Platform "<<i<<":"<<endl;
+        status = clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR, sizeof(buf), buf, NULL);
+        cout<<"\tName: "<<buf<<endl;
+    }
+    
     if(inArgc < 3 or inArgc > 4) usage(inArgv[0]);
     string lFilename = inArgv[1];
     string lOutFilename;
