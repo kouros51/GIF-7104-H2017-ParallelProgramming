@@ -168,13 +168,16 @@ void openClRunner(vector<unsigned char> inLImage, unsigned int lWidth, unsigned 
 //    cout<<"==> Platforms and devices informations:"<<endl;
 //    tp4_opencl.getPlatformsInfo();
 //    tp4_opencl.getDevicesInfo();
+
     tp4_opencl.initializeContext();
     tp4_opencl.initializeCommandQueue();
     tp4_opencl.initializeBuffer(inLImage,lWidth,lHeight,lK,inLFilter);
+
+
     char *kernelSource = tp4_opencl.readOpenClKernelFile();
     tp4_opencl.initializeProgram(kernelSource);
     tp4_opencl.buildProgram();
-//    tp4_opencl.createKernel();
+    tp4_opencl.createKernel();
     cout<<"==> Cleaning up."<<endl;
     tp4_opencl.cleaUp();
 }

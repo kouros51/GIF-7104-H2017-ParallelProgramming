@@ -171,8 +171,8 @@ void tp4_openCL::initializeBuffer(std::vector<unsigned char> gImage, unsigned in
     printf("Allocating buffers for the kernel.\n");
     inImage = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(char) * width * height, &gImage, &status);
     inFilter = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(double) * filterSize*filterSize,filter,&status);
-    inFilterSize = clCreateBuffer(context,CL_MEM_READ_ONLY,sizeof(int),&filterSize,&status);
-    inWidth = clCreateBuffer(context,CL_MEM_READ_ONLY,sizeof(int),&width,&status);
+    inFilterSize = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(int), &filterSize, &status);
+    inWidth = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(int), &width, &status);
     outImage = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(char) * width * height, &gImage, &status);
 }
 
@@ -232,25 +232,36 @@ void tp4_openCL::buildProgram() {
     }
 }
 
-//void tp4_openCL::createKernel() {
-//    kernel = clCreateKernel(program, "gaussianBlurFilter", &status);
-//    if (status != CL_SUCCESS) {
-//        printf("clCreateKernel failed.\n");
-//        exit(-1);
-//    }
-//
-//    // Mapping the input and output arguments to the kernel
-//    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &iImage);
-//    status |= clSetKernelArg(kernel, 0, sizeof(cl_mem), &iImage);
-//    status |= clSetKernelArg(kernel, 0, sizeof(cl_mem), &iFilter);
-//    status |= clSetKernelArg(kernel, 0, sizeof(cl_mem), &iFilterSize);
-//    status |= clSetKernelArg(kernel, 0, sizeof(cl_mem), &iWidth);
-//
-//    if (status != CL_SUCCESS) {
-//        printf("clSetKernelArg failed.\n");
-//        exit(-1);
-//    }
-//}
+void tp4_openCL::createKernel() {
+    printf("Creating the kernel.\n");
+    kernel = clCreateKernel(program, "gaussianBlurFilter", &status);
+    if (status != CL_SUCCESS) {
+        printf("clCreateKernel failed.\n");
+        exit(-1);
+    }else{
+        printf("Creating kernel succeeded.\n");
+    }
+
+    // Mapping the input and output arguments to the kernel
+    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &inImage);
+    std::cout << status<<std::endl;
+    status |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &inFilter);
+    std::cout << status<<std::endl;
+    status |= clSetKernelArg(kernel, 2, sizeof(int), &inFilterSize);
+    std::cout << status<<std::endl;
+    status |= clSetKernelArg(kernel, 3, sizeof(int), &inWidth);
+    std::cout << status<<std::endl;
+    status |= clSetKernelArg(kernel, 4, sizeof(cl_mem), &outImage);
+    std::cout << status<<std::endl;
+
+    if (status != CL_SUCCESS) {
+        printf("Mapping I/O arguments failed.\n");
+        std::cout << status<<std::endl;
+        exit(-1);
+    }else{
+        printf("Mapping I/O arguments succeeded.\n");
+    }
+}
 
 void tp4_openCL::cleaUp() {
     clReleaseContext(context);
@@ -261,6 +272,7 @@ void tp4_openCL::cleaUp() {
     clReleaseMemObject(inWidth);
     clReleaseMemObject(outImage);
     clReleaseProgram(program);
+    clReleaseKernel(kernel);
 
 }
 
