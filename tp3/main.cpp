@@ -12,8 +12,6 @@
 #include <mpi.h>
 
 
-
-
 // Inverser la matrice par la méthode de Gauss-Jordan; implantation MPI parallèle.
 void invertParallel(Matrix &iA);
 
@@ -21,6 +19,7 @@ using namespace std;
 using namespace MPI;
 
 size_t gPivot;
+void printValarray (const valarray<double>& va, int num);
 
 // Inverser la matrice par la méthode de Gauss-Jordan; implantation séquentielle.
 void invertSequential(Matrix &iA) {
@@ -32,6 +31,7 @@ void invertSequential(Matrix &iA) {
 
     // traiter chaque rangée
     for (size_t k = 0; k < iA.rows(); ++k) {
+        cout << "##########pour k:" << k << endl;
         // trouver l'index p du plus grand pivot de la colonne k en valeur absolue
         // (pour une meilleure stabilité numérique).
         size_t p = k;
@@ -42,11 +42,17 @@ void invertSequential(Matrix &iA) {
                 p = i;
             }
         }
+        cout << "indice du pivot:" << p << endl;
         // vérifier que la matrice n'est pas singulière
         if (lAI(p, k) == 0) throw runtime_error("Matrix not invertible");
 
+        cout << "before swap\n" << lAI.str() << endl;
         // échanger la ligne courante avec celle du pivot
-        if (p != k) lAI.swapRows(p, k);
+        if (p != k) {
+            cout << "indice du k:" << k << endl;
+            lAI.swapRows(p, k);
+            cout << "after swap\n" << lAI.str() << endl;
+        }
 
         double lValue = lAI(k, k);
         for (size_t j = 0; j < lAI.cols(); ++j) {
@@ -55,6 +61,7 @@ void invertSequential(Matrix &iA) {
             // Ainsi, lAI(k,k) deviendra égal à 1.
             lAI(k, j) /= lValue;
         }
+        cout << "after division\n" << lAI.str() << endl;
 
         // Pour chaque rangée...
         for (size_t i = 0; i < lAI.rows(); ++i) {
@@ -62,9 +69,12 @@ void invertSequential(Matrix &iA) {
                 // On soustrait la rangée k
                 // multipliée par l'élément k de la rangée courante
                 double lValue = lAI(i, k);
+                cout << "lValue"<< lValue << endl;
+                printValarray(lAI.getRowCopy(k),8);
                 lAI.getRowSlice(i) -= lAI.getRowCopy(k) * lValue;
             }
         }
+        cout << "Iteration"<< k <<", Computation\n" << lAI.str() << endl;
     }
 
     // On copie la partie droite de la matrice AI ainsi transformée
@@ -72,6 +82,18 @@ void invertSequential(Matrix &iA) {
     for (unsigned int i = 0; i < iA.rows(); ++i) {
         iA.getRowSlice(i) = lAI.getDataArray()[slice(i * lAI.cols() + iA.cols(), iA.cols(), 1)];
     }
+}
+
+
+void printValarray (const valarray<double>& va, int num)
+{
+    for (int i=0; i<va.size()/num; i++) {
+        for (int j=0; j<num; j++) {
+            cout << va[i*num+j] << ' ';
+        }
+        cout << endl;
+    }
+    cout << endl;
 }
 
 
@@ -94,11 +116,11 @@ Matrix multiplyMatrix(const Matrix &iMat1, const Matrix &iMat2) {
 
 int main(int argc, char **argv) {
 
-    MPI::Init();
+//    MPI::Init();
     srand((unsigned) time(NULL));
 
-    int lSize = COMM_WORLD.Get_size();
-    int lRank = COMM_WORLD.Get_rank();
+//    int lSize = COMM_WORLD.Get_size();
+//    int lRank = COMM_WORLD.Get_rank();
 
     unsigned int lS = 5;
     if (argc == 2) {
@@ -106,10 +128,10 @@ int main(int argc, char **argv) {
     }
 
 
-    if (lRank == 0) {
-        //Identify The master process
-        cout << "COMM World:\n" << lSize << endl;
-        cout << "je suis le master processus, " << lRank << endl;
+//    if (lRank == 0) {
+//        //Identify The master process
+//        cout << "COMM World:\n" << lSize << endl;
+//        cout << "je suis le master processus, " << lRank << endl;
 
         MatrixRandom lA(lS, lS);
         Matrix lB(lA);
@@ -117,18 +139,18 @@ int main(int argc, char **argv) {
         cout << "Matrice random:\n" << lA.str() << endl;
         cout << "Matrice random copie:\n" << lB.str() << endl;
 
-//        invertSequential(lB);
+        invertSequential(lB);
 
-//        cout << "Matrice inverse:\n" << lB.str() << endl;
+        cout << "Matrice inverse:\n" << lB.str() << endl;
 
 //        Matrix lRes = multiplyMatrix(lA, lB);
 //        cout << "Produit des deux matrices:\n" << lRes.str() << endl;
 //        cout << "Erreur: " << lRes.getDataArray().sum() - lS << endl;
-    }
-    invertParallel(lB);
+//    }
+//    invertParallel(lB);
 
-    cout << "Je suis le processus" << lRank << endl;
-    MPI::Finalize();
+//    cout << "Je suis le processus" << lRank << endl;
+//    MPI::Finalize();
 
     return 0;
 }

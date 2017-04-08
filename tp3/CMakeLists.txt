@@ -8,7 +8,7 @@ find_package(MPI REQUIRED)
 SET(CMAKE_C_COMPILER mpicc)
 SET(CMAKE_CXX_COMPILER mpicxx)
 
-add_executable(gaussJordan main.cpp Matrix.cpp)
+add_executable(tp3 main.cpp Matrix.cpp)
 
 
 INCLUDE(CPack)
