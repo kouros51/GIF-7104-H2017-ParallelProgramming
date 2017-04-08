@@ -9,7 +9,7 @@
 class tp4_openCL {
 public:
     // return value for most OpenCL functions
-    cl_int status = NULL;
+    cl_int status = 0;
     cl_uint numPlatforms = 0;
     cl_platform_id *platforms = NULL;
     cl_uint numDevices = 0;
