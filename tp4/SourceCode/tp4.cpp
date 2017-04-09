@@ -8,6 +8,8 @@
 #include "Headers/Chrono.hpp"
 #include "PACC/Tokenizer.hpp"
 
+
+
 using namespace std;
 
 void usage(char *inName);
@@ -165,9 +167,9 @@ void openClRunner(vector<unsigned char> inLImage, unsigned int lWidth, unsigned 
     tp4_openCL tp4_opencl;
     tp4_opencl.initialize();
 
-//    cout<<"==> Platforms and devices informations:"<<endl;
-//    tp4_opencl.getPlatformsInfo();
-//    tp4_opencl.getDevicesInfo();
+    cout<<"==> Platforms and devices informations:"<<endl;
+    tp4_opencl.getPlatformsInfo();
+    tp4_opencl.getDevicesInfo();
 
     tp4_opencl.initializeContext();
     tp4_opencl.initializeCommandQueue();

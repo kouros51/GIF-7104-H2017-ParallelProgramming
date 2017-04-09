@@ -159,7 +159,7 @@ void tp4_openCL::initializeContext() {
 }
 
 void tp4_openCL::initializeCommandQueue() {
-    this->cmdQueue = clCreateCommandQueueWithProperties(context, devices[0], 0, &status);
+    cmdQueue = clCreateCommandQueue(context, devices[0], 0, &status);
     if (status != CL_SUCCESS || cmdQueue == NULL) {
         printf("clCreateCommandQueueWithProperties failed.");
         exit(-1);
