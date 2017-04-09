@@ -6,7 +6,7 @@ CC=g++
 LIBS=
 LIB_PATHS=
 INCLUDE_PATHS=
-CFLAGS=-O3 -g -std=c++11 -Wall -lOpenCL
+CFLAGS=-O3 -g -std=c++11 -Wall -lOpenCL -fopenacc
 
 EXECUTABLE=tp4
 

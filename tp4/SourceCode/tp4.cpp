@@ -7,7 +7,7 @@
 #include "Headers/tp4_openCL.h"
 #include "Headers/Chrono.hpp"
 #include "PACC/Tokenizer.hpp"
-
+#include "openacc.h"
 
 
 using namespace std;
@@ -22,7 +22,7 @@ void sequentialRunner(vector<unsigned char> vector1, unsigned int i, unsigned in
 
 void openClRunner(vector<unsigned char> i, unsigned int i1, unsigned int i2, int i3, double *pDouble);
 
-void openAccRunner();
+void openAccRunner(vector<unsigned char> vector1, unsigned int i, unsigned int i1, int i2, double *pDouble);
 
 int main(int argc, char **argv) {
 
@@ -76,8 +76,8 @@ int main(int argc, char **argv) {
     // Start Chrono
     Chrono lChrono(true);
 
-    openClRunner(lImage, lWidth, lHeight, lK, lFilter);
-//    openAccRunner();
+//    openClRunner(lImage, lWidth, lHeight, lK, lFilter);
+    openAccRunner(lImage, lWidth, lHeight, lK, lFilter);
 //    sequentialRunner(lImage, lWidth, lHeight, lK, lFilter);
 
     lChrono.pause();
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
     printf("Temps d'execution = %f sec.\n", lChrono.get());
 
     //Sauvegarde de l'image dans un fichier sortie
-    //encode(lOutFilename.c_str(), lImage, lWidth, lHeight);
+    encode(lOutFilename.c_str(), lImage, lWidth, lHeight);
 
     cout << "L'image a été filtrée et enregistrée dans " << lOutFilename << " avec succès!" << endl;
 
@@ -184,8 +184,45 @@ void openClRunner(vector<unsigned char> inLImage, unsigned int lWidth, unsigned 
     tp4_opencl.cleaUp();
 }
 
-void openAccRunner() {
+void openAccRunner(vector<unsigned char> lImage, unsigned int lWidth, unsigned int lHeight, int lK, double *lFilter) {
     cout<<"****OpenACC runner for the blur filter****"<<endl;
-    cout<<"Not Implemented Yet"<<endl;
-    //TODO: Implement OpenACC Runner
+    
+    //Variables contenant des indices
+    int fy, fx, lHalfK;
+    //Variables temporaires pour les canaux de l'image
+    double lRGB[3];
+    lRGB[0] = 0.; lRGB[1] = 0.; lRGB[2] = 0.;
+    unsigned int lDim[2];
+    lDim[0] = lHeight; lDim[1] = lWidth;
+    lHalfK = lK/2;
+    // For more measure accuracy repeat the filter several time
+    //for (unsigned int repeat=0; repeat<1;repeat++)
+    //{
+        #pragma acc data copy(lImage, lRGB) copyin (lHalfK, lDim)
+        {
+            #pragma acc parallel
+            {
+                for (unsigned int x = lHalfK; x < lDim[1] - lHalfK; x++) {
+                    #pragma acc loop
+                    for (unsigned int y = lHalfK; y < lDim[0] - lHalfK; y++) {
+                        for (int j = -lHalfK; j <= lHalfK; j++) {
+                            fy = j + lHalfK;
+                            #pragma acc loop private(lRGB)
+                            for (int i = -lHalfK; i <= lHalfK; i++) {
+                                fx = i + lHalfK;
+                                //R[x + i, y + j] = Im[x + i, y + j].R * Filter[i, j]
+                                lRGB[0] += double(lImage[(y + j) * lDim[1] * 4 + (x + i) * 4]) * lFilter[fx + fy * lK];
+                                lRGB[1] += double(lImage[(y + j) * lDim[1] * 4 + (x + i) * 4 + 1]) * lFilter[fx + fy * lK];
+                                lRGB[2] += double(lImage[(y + j) * lDim[1] * 4 + (x + i) * 4 + 2]) * lFilter[fx + fy * lK];
+                            }
+                        }
+                        //Placer le résultat dans l'image.
+                        lImage[y * lDim[1] * 4 + x * 4] = (unsigned char) lRGB[0];
+                        lImage[y * lDim[1] * 4 + x * 4 + 1] = (unsigned char) lRGB[1];
+                        lImage[y * lDim[1] * 4 + x * 4 + 2] = (unsigned char) lRGB[2];
+                    }
+                }
+            }
+        }
+    //}
 }
