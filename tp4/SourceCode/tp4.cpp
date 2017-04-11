@@ -188,28 +188,32 @@ void openAccRunner(vector<unsigned char> lImage, unsigned int lWidth, unsigned i
     cout<<"****OpenACC runner for the blur filter****"<<endl;
     
     //Variables contenant des indices
-    int fy, fx, lHalfK;
+    int fy, fx;
     //Variables temporaires pour les canaux de l'image
     double lRGB[3];
-    lRGB[0] = 0.; lRGB[1] = 0.; lRGB[2] = 0.;
-    unsigned int lDim[2];
-    lDim[0] = lHeight; lDim[1] = lWidth;
-    lHalfK = lK/2;
+    unsigned int lDim[3];
+    lDim[0] = lHeight; lDim[1] = lWidth; lDim[2] = lK/2;
     // For more measure accuracy repeat the filter several time
     //for (unsigned int repeat=0; repeat<1;repeat++)
     //{
-        #pragma acc data copy(lImage, lRGB) copyin (lHalfK, lDim)
+        #pragma acc data copy(lImage) pcreate(lRGB) copyin (lDim, fy, fx)
         {
             #pragma acc parallel
             {
-                for (unsigned int x = lHalfK; x < lDim[1] - lHalfK; x++) {
-                    #pragma acc loop
-                    for (unsigned int y = lHalfK; y < lDim[0] - lHalfK; y++) {
-                        for (int j = -lHalfK; j <= lHalfK; j++) {
-                            fy = j + lHalfK;
+            	#pragma acc loop
+                for (unsigned int x = lDim[2]; x < lDim[1] - lDim[2]; x++) {
+
+                    #pragma acc loop gang
+                    for (unsigned int y = lDim[2]; y < lDim[0] - lDim[2]; y++) {
+                    	lRGB[0] = 0.; lRGB[1] = 0; lRGB[2] = 0.;
+
+                    	#pragma acc loop private(lRGB) vector
+                        for (int j = -lDim[2]; j <= lDim[2]; j++) {
+                            fy = j + lDim[2];
+
                             #pragma acc loop private(lRGB)
-                            for (int i = -lHalfK; i <= lHalfK; i++) {
-                                fx = i + lHalfK;
+                            for (int i = -lDim[2]; i <= lDim[2]; i++) {
+                                fx = i + lDim[2];
                                 //R[x + i, y + j] = Im[x + i, y + j].R * Filter[i, j]
                                 lRGB[0] += double(lImage[(y + j) * lDim[1] * 4 + (x + i) * 4]) * lFilter[fx + fy * lK];
                                 lRGB[1] += double(lImage[(y + j) * lDim[1] * 4 + (x + i) * 4 + 1]) * lFilter[fx + fy * lK];

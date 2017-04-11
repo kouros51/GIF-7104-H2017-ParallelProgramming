@@ -1,0 +1,143 @@
+\documentclass[11pt]{report}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{setspace}
+
+\def\code#1{\texttt{#1}} % pour écrire du code (police monospace)
+\def\comment#1{\color{gray} #1 \color{black}}
+
+\begin{document}
+\renewcommand{\labelitemi}{$\bullet$}
+\renewcommand{\labelitemii}{$\circ$}
+\thispagestyle{empty}
+
+\titleformat{\chapter}[display]
+	{\normalfont\bfseries}
+	{}
+	{-3.5ex}
+	{
+	\Huge}
+	[]
+
+\titlecontents{chapter}[0em]
+	{\vskip 1ex}%
+	{\bfseries\large}% numbered sections formattin
+	{\itshape}% unnumbered sections formatting
+	{\bfseries \titlerule*[4pt]{.}\contentspage}%
+	[{\vskip 1ex}]
+	
+\titlecontents{section}[4em]
+	{\vskip 0.5ex}%
+	{\contentslabel{2.3em}}% numbered sections formattin
+	{}% unnumbered sections formatting
+	{\titlerule*[4pt]{.}\contentspage}%
+	[{\vskip 0.5ex}]
+	
+\titlecontents{subsection}[8em]
+	{\vskip 0.25ex}%
+	{\contentslabel{2.3em}}% numbered sections formattin
+	{}% unnumbered sections formatting
+	{\titlerule*[4pt]{.}\contentspage}%
+	[{\vskip 0.25ex}]
+
+\begin{center}
+	\huge  \bf Rapport du TP4: Paralèlliser un algorithme de filtrage numérique basé
+	sur des opérations de convolution avec OpenCL et OpenACC\\
+	\vfill
+
+	\Large Equipe numéro 2\\
+	\vspace*{3ex}
+
+	\medskip
+	\normalsize
+	\textit{Houssem Sebouai}\\
+	111 134 915\\
+	houssem.sebouai.1@ulaval.ca\\
+	
+	\medskip
+	\normalsize
+	\textit{Thierry St-Gelais}\\
+	111 169 338\\
+thierry.st-gelais.1@ulaval.ca\\
+
+	\vfill
+	Dans le cadre des travaux pratiques du cours\\
+	\LARGE GLO-7014\\
+	\large Programmation parallèle et distribuée\\
+	Professeur: Marc Parizeau
+
+	\vfill
+	\includegraphics[width=5cm]{Images/logo.jpg}
+	\\
+	Hiver 2017
+\end{center}
+
+\newpage
+
+\onehalfspace
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+\chapter{Introduction}
+
+	Pour ce quatrième TP, il nous était demandé de paralléliser le code donné lors du TP2 en utilisant non pas le processeur de notre ordinateur, mais bien son GPGPU. Pour la première implémentation nous avions le choix entre CUDA ou bien OpenCL et nous devions utiliser OpenACC pour la seconde implémentation du code parallèle.
+	
+	\bigskip
+	Pour la première implémentation nous avons choisi d'utiliser OpenCL par simplicité, mais aussi par souci de portabilité, CUDA n'étant supporté que par les GPUs de Nvidia.
+	
+\clearpage
+\chapter{Réalisation du travail avec OpenCL}
+
+	\section{Description générale de l'algorithme}
+	
+	
+	\section{Approche adoptée pour la parallélisation}
+	
+	
+	\section{Expérimentations et résultats}
+	
+		\subsection{Protocole d'expérimentation}
+		
+		\subsection{Résultats}
+		
+		\subsection{Interprétation}
+	
+\clearpage
+\chapter{Réalisation du travail avec\\ OpenACC}
+	
+	\section{Description générale de l'algorithme}
+		Le fonctionnement général de l'algorithme OpenACC est similaire au code séquentiel, donc quatres boucles imbriquées. Les deux première assurent le parcours de l'image dans les deux dimensions, alors que les deux boucles les plus profondes assurent le parcours du noyau dans les deux dimensions. 
+		
+		\bigskip
+		Au plus profond de ces quatre boucles on retrouve trois op/rations, qui nous permettent de déterminer la nouvelle couleur du pixel en cours en y accumulant les valeurs de couleurs des pixels voisins selon un noyau de flou gaussien préalablement défini.
+	
+	\section{Approche adoptée pour la parallélisation }
+		Pour paralléliser ces boucles, nous avons décider d'y aller avec
+	
+	\section{Expérimentations et résultats}
+	
+		\subsection{Protocole d'expérimentation}
+		
+		\subsection{Résultats}
+		
+		\subsection{Interprétation}
+
+
+\chapter{Conclusion}
+
+Dans ce travail, nous avons essayé d'explorer ce qu'OpenMP offrait comme possibilités pour
+paralléliser principalement des boucles, afin d'accélérer les calculs applique au filtrage
+numérique d'image.
+
+
+\end{document}
