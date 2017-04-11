@@ -27,7 +27,7 @@ __kernel void gaussianBlurFilter(
         }
     }
     //Placer le résultat dans l'image.
-    ouImage[y * iWidth * 4 + x * 4] = (unsigned char) lR;
-    ouImage[y * iWidth * 4 + x * 4 + 1] = (unsigned char) lG;
-    ouImage[y * iWidth * 4 + x * 4 + 2] = (unsigned char) lB;
+    outImage[y * iWidth * 4 + x * 4] = (unsigned char) lR;
+    outImage[y * iWidth * 4 + x * 4 + 1] = (unsigned char) lG;
+    outImage[y * iWidth * 4 + x * 4 + 2] = (unsigned char) lB;
 };
