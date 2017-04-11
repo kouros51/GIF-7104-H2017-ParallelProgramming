@@ -200,14 +200,12 @@ void openAccRunner(vector<unsigned char> lImage, unsigned int lWidth, unsigned i
         {
             #pragma acc parallel
             {
-            	#pragma acc loop
                 for (unsigned int x = lDim[2]; x < lDim[1] - lDim[2]; x++) {
 
-                    #pragma acc loop gang
+                    #pragma acc loop private(lRGB)
                     for (unsigned int y = lDim[2]; y < lDim[0] - lDim[2]; y++) {
                     	lRGB[0] = 0.; lRGB[1] = 0; lRGB[2] = 0.;
 
-                    	#pragma acc loop private(lRGB) vector
                         for (int j = -lDim[2]; j <= lDim[2]; j++) {
                             fy = j + lDim[2];
 
