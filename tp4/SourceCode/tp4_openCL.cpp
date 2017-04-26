@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <cstring>
 
 #include "Headers/tp4_openCL.h"
 
@@ -138,9 +139,22 @@ void tp4_openCL::getDevicesInfo() {
 
         // Getting device Type
         size_t max_work_group_size;
-        status |= clGetDeviceInfo(devices[i], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(max_work_group_size),
+        status |= clGetDeviceInfo(devices[i], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t),
                                   &max_work_group_size, NULL);
-        printf("\tCL_DEVICE_MAX_WORK_GROUP_SIZE: %u\n", max_work_group_size);
+        printf("\tCL_DEVICE_MAX_WORK_GROUP_SIZE: %zu\n", max_work_group_size);
+
+        // Getting device Type
+        cl_uint max_work_item_dimension;
+        status |= clGetDeviceInfo(devices[i], CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(max_work_item_dimension),
+                                  &max_work_item_dimension, NULL);
+        printf("\tCL_DEVICE_MAX_WORK_ITEM_DIMENSIONS: %u\n", max_work_item_dimension);
+
+        size_t* max_work_item_sizes = (size_t*)malloc(sizeof(size_t) * max_work_item_dimension);
+        status |= clGetDeviceInfo(devices[i], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * max_work_item_dimension, max_work_item_sizes, NULL);
+        printf("\tCL_DEVICE_MAX_WORK_ITEM_SIZES:\n");
+        for (size_t i = 0; i < max_work_item_dimension; ++i) {
+            printf("\t\tFor dimension[%lu]:%lu\t\n", i, max_work_item_sizes[i]);
+        }
 
         if (status != CL_SUCCESS) {
             printf("clGetDeviceIDs failed\n");
@@ -166,19 +180,20 @@ void tp4_openCL::initializeCommandQueue() {
     }
 }
 
-void tp4_openCL::initializeBuffer(std::vector<unsigned char> gImage, unsigned int width, unsigned int height,
+void tp4_openCL::initializeBuffer(std::vector<unsigned char> *gImage, unsigned int width, unsigned int height,
                                   int filterSize, double *filter) {
     printf("Allocating buffers for the kernel.\n");
-    inImage = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(char) * width * height, &gImage, &status);
-    inFilter = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(double) * filterSize*filterSize,filter,&status);
-    inFilterSize = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(int), &filterSize, &status);
-    inWidth = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(int), &width, &status);
-    outImage = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(char) * width * height, &gImage, &status);
+    inImage = clCreateBuffer(context, CL_MEM_READ_ONLY , sizeof(unsigned  char) * width * height, gImage, &status);
+    inFilter = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(double) * filterSize*filterSize,filter,&status);
+    inFilterSize = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(int), &filterSize, &status);
+    inWidth = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(int), &width, &status);
+    outImage = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(unsigned  char) * width * height, NULL, &status);
+
 }
 
 char *tp4_openCL::readOpenClKernelFile() {
     printf("Reading kernel from source.\n");
-    FILE *sourceFile = fopen("filter.cl", "rb");
+    FILE *sourceFile = fopen("../filter.cl", "rb");
     fseek(sourceFile, 0, SEEK_END);
     size_t sourceCodeSize = ftell(sourceFile);
     rewind(sourceFile);
@@ -229,6 +244,7 @@ void tp4_openCL::buildProgram() {
         exit(0);
     } else {
         printf("No build errors.\n");
+
     }
 }
 
@@ -244,15 +260,10 @@ void tp4_openCL::createKernel() {
 
     // Mapping the input and output arguments to the kernel
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &inImage);
-    std::cout << status<<std::endl;
     status |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &inFilter);
-    std::cout << status<<std::endl;
     status |= clSetKernelArg(kernel, 2, sizeof(int), &inFilterSize);
-    std::cout << status<<std::endl;
     status |= clSetKernelArg(kernel, 3, sizeof(int), &inWidth);
-    std::cout << status<<std::endl;
     status |= clSetKernelArg(kernel, 4, sizeof(cl_mem), &outImage);
-    std::cout << status<<std::endl;
 
     if (status != CL_SUCCESS) {
         printf("Mapping I/O arguments failed.\n");
@@ -274,6 +285,27 @@ void tp4_openCL::cleaUp() {
     clReleaseProgram(program);
     clReleaseKernel(kernel);
 
+}
+
+void tp4_openCL::runKernel(std::vector<unsigned char> *gImage, unsigned int width, unsigned int height) {
+    printf("Enqueuing in the NDRange.\n");
+    size_t globalWorkSize[2]={width,height};
+    size_t localWorkSize[2]={8,8};
+    status = clEnqueueNDRangeKernel(cmdQueue,kernel,2,NULL,globalWorkSize,localWorkSize,0,NULL,NULL);
+    if(status!=CL_SUCCESS){
+        printf("Enqueuing Failed!!!!.\n");
+        std::cout<<status<<std::endl;
+        exit(-1);
+    }
+    printf("Enqueuing in the NDRange succeeded.\n");
+    printf("Querying the result.\n");
+    status = clEnqueueReadBuffer(cmdQueue,outImage,CL_TRUE,0,sizeof(unsigned  char) * width * height,gImage,0,NULL,NULL);
+    if(status!=CL_SUCCESS){
+        printf("clEnqueueReadBuffer Failed!!!!.\n");
+        if (status == CL_INVALID_VALUE) std::cout<<"\tErreur Code: "<<status<<std::endl;
+        exit(-1);
+    }
+    printf("Querying the result succeeded.\n");
 }
 
 

@@ -20,7 +20,7 @@ void encode(const char *inFilename, vector<unsigned char> &inImage, unsigned int
 
 void sequentialRunner(vector<unsigned char> vector1, unsigned int i, unsigned int i1, int i2, double *pDouble);
 
-void openClRunner(vector<unsigned char> i, unsigned int i1, unsigned int i2, int i3, double *pDouble);
+vector<unsigned char> openClRunner(vector<unsigned char> i, unsigned int i1, unsigned int i2, int i3, double *pDouble);
 
 void openAccRunner(vector<unsigned char> vector1, unsigned int i, unsigned int i1, int i2, double *pDouble);
 
@@ -76,8 +76,8 @@ int main(int argc, char **argv) {
     // Start Chrono
     Chrono lChrono(true);
 
-//    openClRunner(lImage, lWidth, lHeight, lK, lFilter);
-    openAccRunner(lImage, lWidth, lHeight, lK, lFilter);
+    lImage=openClRunner(lImage, lWidth, lHeight, lK, lFilter);
+//    openAccRunner(lImage, lWidth, lHeight, lK, lFilter);
 //    sequentialRunner(lImage, lWidth, lHeight, lK, lFilter);
 
     lChrono.pause();
@@ -161,7 +161,8 @@ void sequentialRunner(vector<unsigned char> lImage, unsigned int lWidth, unsigne
 }
 
 // OpenCL Runner for The GaussianBluFilter
-void openClRunner(vector<unsigned char> inLImage, unsigned int lWidth, unsigned int lHeight, int lK, double *inLFilter) {
+vector<unsigned char>
+openClRunner(vector<unsigned char> inLImage, unsigned int lWidth, unsigned int lHeight, int lK, double *inLFilter) {
     cout<<"**** OpenCL runner for the blur filter ****"<<endl;
     // OpenCL implementation
     tp4_openCL tp4_opencl;
@@ -173,13 +174,14 @@ void openClRunner(vector<unsigned char> inLImage, unsigned int lWidth, unsigned 
 
     tp4_opencl.initializeContext();
     tp4_opencl.initializeCommandQueue();
-    tp4_opencl.initializeBuffer(inLImage,lWidth,lHeight,lK,inLFilter);
+    tp4_opencl.initializeBuffer(&inLImage,lWidth,lHeight,lK,inLFilter);
 
 
     char *kernelSource = tp4_opencl.readOpenClKernelFile();
     tp4_opencl.initializeProgram(kernelSource);
     tp4_opencl.buildProgram();
     tp4_opencl.createKernel();
+    tp4_opencl.runKernel(&inLImage,lWidth,lHeight);
     cout<<"==> Cleaning up."<<endl;
     tp4_opencl.cleaUp();
 }

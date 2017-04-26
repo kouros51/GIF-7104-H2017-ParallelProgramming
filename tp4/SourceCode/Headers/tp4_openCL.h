@@ -28,7 +28,7 @@ public:
 
     void getDevicesInfo();
 
-    void initializeBuffer(std::vector<unsigned char> gImage, unsigned int height, unsigned int width, int filterSize,
+    void initializeBuffer(std::vector<unsigned char> *gImage, unsigned int height, unsigned int width, int filterSize,
                           double *filter);
 
     void initializeContext();
@@ -44,6 +44,8 @@ public:
     void createKernel();
 
     void cleaUp();
+
+    void runKernel(std::vector<unsigned char> *vector, unsigned int i, unsigned int i1);
 };
 
 

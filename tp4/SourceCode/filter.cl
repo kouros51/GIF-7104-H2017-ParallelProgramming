@@ -2,14 +2,15 @@
 __kernel void gaussianBlurFilter(
         __global unsigned char* iImage,
         __global double* iFilter,
-        const int iFilterSize,
-        const int iWidth,
-        __global unsigned char* ouImage
+        int iFilterSize,
+        int iWidth,
+        __global unsigned char* outImage
 ){
     unsigned int x = get_global_id(0);
     unsigned int y = get_global_id(1);
+
     int halfFilterSize,fy,fx;
-    double lR, lG, lB,tmp;
+    double lR, lG, lB;
 
     lR = 0.;
     lG = 0.;
