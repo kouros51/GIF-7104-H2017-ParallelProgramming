@@ -14,6 +14,7 @@ using namespace std;
 
 int main (int argc,char **argv){
     try {
+        unsigned int time = clock();
         int device = argc > 1 ? atoi(argv[1]) : 0 ;
         setDevice(device);
         info();
@@ -21,6 +22,8 @@ int main (int argc,char **argv){
         array A = randu(5,5, f32);
         af_print(A);
 
+        time = clock() - time ;
+        printf("Executed in %f seconds.\n", ((float)time/(float)CLOCKS_PER_SEC));
 
     } catch (af::exception& e) {
         fprintf(stderr, "%s\n",e.what());
