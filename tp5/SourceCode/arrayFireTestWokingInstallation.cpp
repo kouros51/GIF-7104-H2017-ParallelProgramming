@@ -5,9 +5,29 @@
 //
 
 
+#include <iostream>
+#include <arrayfire.h>
+
 
 using namespace af;
+using namespace std;
 
 int main (int argc,char **argv){
+    try {
+        int device = argc > 1 ? atoi(argv[1]) : 0 ;
+        setDevice(device);
+        info();
+        printf("Create a 5-by-3 matrix of random floats on GPU ?????\n");
+        array A = randu(5,5, f32);
+        af_print(A);
+
+
+    } catch (af::exception& e) {
+        fprintf(stderr, "%s\n",e.what());
+        throw ;
+    }
+
+    printf("\n\n=========================\n");
+    cout<< "Yay This is working"<<endl;
     return 0;
 }
