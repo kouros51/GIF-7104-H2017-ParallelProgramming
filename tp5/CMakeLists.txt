@@ -1,12 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT(ArrayFire-Examples)
+PROJECT(tp5)
 
 # Find CUDA and OpenCL
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 FIND_PACKAGE(CUDA QUIET)
 FIND_PACKAGE(OpenCL QUIET)
 
-# If the examples are not being built at the same time as ArrayFire,
+# If the project is not being built at the same time as ArrayFire,
 # we need to first find the ArrayFire library
 IF(TARGET afcpu OR TARGET afcuda OR TARGET afopencl OR TARGET af)
     SET(ArrayFire_CPU_FOUND False)
@@ -46,14 +46,15 @@ ENDIF(WIN32)
 # For most uses only FIND_PACKAGE(ArrayFire REQUIRED), ADD_EXECUTABLE(...)
 # and TARGET_LINK_LIBRARIES(... ${ARRAYFIRE_LIBRARIES}) are needed
 MACRO(BUILD_EXAMPLE EXAMPLE_NAME EXAMPLE_SOURCE BACKEND_NAME BACKEND_LIBRARIES OTHER_LIBRARIES OUT_DIR_NAME)
-    ADD_EXECUTABLE(example_${EXAMPLE_NAME}_${BACKEND_NAME} ${EXAMPLE_SOURCE})
-    TARGET_LINK_LIBRARIES(example_${EXAMPLE_NAME}_${BACKEND_NAME}
+    ADD_EXECUTABLE(${EXAMPLE_NAME}_${BACKEND_NAME} ${EXAMPLE_SOURCE})
+    TARGET_LINK_LIBRARIES(${EXAMPLE_NAME}_${BACKEND_NAME}
         ${BACKEND_LIBRARIES} ${OTHER_LIBRARIES})
-    SET_TARGET_PROPERTIES(example_${EXAMPLE_NAME}_${BACKEND_NAME}
+    SET_TARGET_PROPERTIES(${EXAMPLE_NAME}_${BACKEND_NAME}
         PROPERTIES
         OUTPUT_NAME ${EXAMPLE_NAME}_${BACKEND_NAME}
-        RUNTIME_OUTPUT_DIRECTORY ${OUT_DIR_NAME}
-        FOLDER "Examples/${BACKEND_NAME}")
+        # RUNTIME_OUTPUT_DIRECTORY ${OUT_DIR_NAME} (un seul doisser pour les executables)
+        RUNTIME_OUTPUT_DIRECTORY "executables"
+        FOLDER "tp5/${BACKEND_NAME}")
 ENDMACRO()
 
 # A macro to build a list of files
@@ -62,7 +63,7 @@ ENDMACRO()
 MACRO(BUILD_ALL FILES BACKEND_NAME BACKEND_LIBRARIES OTHER_LIBRARIES)
 
     STRING(TOUPPER ${BACKEND_NAME} BACKEND_NAME_UPPER)
-    MESSAGE(STATUS "EXAMPLES: ${BACKEND_NAME_UPPER} backend is ${BUILD_${BACKEND_NAME_UPPER}}.")
+    MESSAGE(STATUS "${BACKEND_NAME_UPPER} backend is ${BUILD_${BACKEND_NAME_UPPER}}.")
     IF(${BUILD_${BACKEND_NAME_UPPER}})
         FOREACH(FILE ${FILES})
             GET_FILENAME_COMPONENT(EXAMPLE ${FILE} NAME_WE)
@@ -86,7 +87,7 @@ IF(${ArrayFire_CPU_FOUND})  # variable defined by FIND(ArrayFire ...)
 ELSEIF(TARGET afcpu)        # variable defined by the ArrayFire build tree
     BUILD_ALL("${FILES}" cpu afcpu "")
 ELSE()
-    MESSAGE(STATUS "EXAMPLES: CPU backend is OFF. afcpu was not found.")
+    MESSAGE(STATUS "WARNING: CPU backend is OFF. afcpu was not found.")
 ENDIF()
 
 # Next we build each example using every backend.
@@ -96,7 +97,7 @@ IF(${ArrayFire_Unified_FOUND})  # variable defined by FIND(ArrayFire ...)
 ELSEIF(TARGET af)        # variable defined by the ArrayFire build tree
     BUILD_ALL("${FILES}" unified af "${CMAKE_DL_LIBS}")
 ELSE()
-    MESSAGE(STATUS "EXAMPLES: UNIFIED backend is OFF. af was not found.")
+    MESSAGE(STATUS "WARNING: UNIFIED backend is OFF. af was not found.")
 ENDIF()
 
 IF (${CUDA_FOUND})
@@ -134,10 +135,10 @@ IF (${CUDA_FOUND})
     ELSEIF(TARGET afcuda)        # variable defined by the ArrayFire build tree
         BUILD_ALL("${FILES}" cuda afcuda "")
     ELSE()
-        MESSAGE(STATUS "EXAMPLES: CUDA backend is OFF. afcuda was not found")
+        MESSAGE(STATUS "WARNING: CUDA backend is OFF. afcuda was not found")
     ENDIF()
 ELSE()
-    MESSAGE(STATUS "EXAMPLES: CUDA backend is OFF. CUDA was not found")
+    MESSAGE(STATUS "WARNING: CUDA backend is OFF. CUDA was not found")
 ENDIF()
 
 IF (${OpenCL_FOUND})
@@ -147,8 +148,8 @@ IF (${OpenCL_FOUND})
     ELSEIF(TARGET afopencl)        # variable defined by the ArrayFire build tree
         BUILD_ALL("${FILES}" opencl afopencl "${OpenCL_LIBRARIES}")
     ELSE()
-        MESSAGE(STATUS "EXAMPLES: OpenCL backend is OFF. afopencl was not found")
+        MESSAGE(STATUS "WARNING: OpenCL backend is OFF. afopencl was not found")
     ENDIF()
 ELSE()
-    MESSAGE(STATUS "EXAMPLES: OpenCL backend is OFF. OpenCL was not found")
+    MESSAGE(STATUS "WARNING: OpenCL backend is OFF. OpenCL was not found")
 ENDIF()
