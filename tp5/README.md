@@ -3,8 +3,8 @@
 Vincent, Thierry and Houssem.
 
 ### Prérequis
-La librairie ffmpeg doit être installée et accessible en ligne de commande.
-https://ffmpeg.org/download.html
+La librairie ffmpeg doit être installée et accessible en ligne de commande.  
+https://ffmpeg.org/download.html  
 Le programme fait un appel system à ffmpeg pour générer la vidéo.
 
 ### Compiler
