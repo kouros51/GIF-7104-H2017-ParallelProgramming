@@ -22,3 +22,5 @@ SourceFiles
 **.pdf
 
 tp5/build
+
+tp5/executables/

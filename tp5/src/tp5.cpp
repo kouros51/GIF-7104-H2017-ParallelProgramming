@@ -2,9 +2,9 @@
 #include <arrayfire.h>
 #include <cstdio>
 #include <cstdlib>
-
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <iomanip>
 
 using namespace af;
@@ -29,6 +29,29 @@ void saveHeatMap(array heatMap) {
     saveImage(fileName.c_str(), image);
 }
 
+void read_mask(const std:: string maskFile, array &maskOut, const int dim1, const int dim2) {
+    std::ifstream maskIn(maskFile);
+    //std::ofstream testOut("./maskOut");
+    std::string line;
+    maskOut = constant(false, dim1, dim2, b8);
+    while(std::getline(maskIn, line)) {
+        std::istringstream iss(line);
+        int value[2];
+        
+        for (int i = 0; i<2; ++i) {
+            iss >> value[i];
+        }
+        if ((value[0] > 0) && (value[0] < (dim1))) {
+            if ((value[1] > 0) && (value[1] < (dim2))) {
+                maskOut(value[0] -1, value[1] - 1) = true;
+            }
+            else std::cout <<"Column: " << value[0] << " is outside the matrix!" << std::endl;
+        }
+        else std::cout <<"Row: " << value[1] << " is outside the matrix!" << std::endl;
+    }
+    //print("Mask", maskOut);
+}
+
 // En entree, le mask est l'ensemble des cases rouges et noirs sans la frontiere (Donc de taille n - 2 par m - 2)
 // Si une valeur est immuable alors la case est a vrai/1
 void initMutableIndexes(dim4 dim, const array& mask, array& redIndexes, array& blackIndexes) {
@@ -42,11 +65,11 @@ void initMutableIndexes(dim4 dim, const array& mask, array& redIndexes, array& b
         diags(seq(1, end, 2), seq(1, end, 2)) = true;
     }
 
-    redIndexes = allIndexes(diags && !mask);
-    blackIndexes = allIndexes(!diags && !mask);
+    //redIndexes = allIndexes(diags && !mask);
+    //blackIndexes = allIndexes(!diags && !mask);
 }
 
-void sim() {
+void sim(std::string maskFile) {
     int n = 255;
     int m = 6;
 
@@ -92,15 +115,17 @@ void sim() {
 
 
     auto mask = randu(dim4(n - 2, m - 2), b8);
+    read_mask(maskFile, mask, n-2 , m-2);
+    print("Mask", mask);
     array redIndexes;
     array blackIndexes;
-    initMutableIndexes(dim4(n, m), mask, redIndexes, blackIndexes);
+    //initMutableIndexes(dim4(n, m), mask, redIndexes, blackIndexes);
 
     // af_print(mask);
     // af_print(redIndexes);
     // af_print(blackIndexes);
 
-    af_print(heatMap);
+    //af_print(heatMap);
 
     //af_print(redIndexes);
     //af_print(heatMap(redIndexes));
@@ -114,10 +139,17 @@ void sim() {
     // af_print(heatMap);
 }
 
-int main(int argc, char *argv[])
+void usage(char *inName) {
+    std::cout << std::endl << "Usage> " << inName << " config_mat_file, [dimension_matrix"
+            " = 100], [max_var_treshold = 1*10^-3], [iteration_image = 1], [max_"
+            "cores = 1]" << std::endl;
+    exit(1);
+}
+
+int main(int argc, char *argv[]) // argv: 1= maskFile, 2=dimensions, 3=threshold, 4=iterations/image, 5=#ofCores
 {
 
-
+    if (argc < 2) usage(argv[0]);
 
     try {
 
@@ -126,8 +158,12 @@ int main(int argc, char *argv[])
         int device = argc > 1 ? atoi(argv[1]) : 0;
         af::setDevice(device);
         af::info();
-
-        sim();
+        std::string maskFile = argv[1];
+        int dim = 100;
+        if (argc>=3) {
+            dim = atoi(argv[2]);
+        }
+        sim(maskFile);
 
         // printf("Create a 5-by-3 matrix of random floats on the GPU\n");
         // array A = randu(5,3, f32);
