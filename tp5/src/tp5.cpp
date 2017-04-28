@@ -3,29 +3,56 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
 using namespace af;
 
-void initMutableIndexes(dim4 dim, const array& mask, array& redIndexes, array& blackIndexes) {
-    auto allIndexes = iota(dim, dim4(1, 1), u64);
-    af_print(allIndexes);
+static const float maxHue = 360;
+static const float blueHue = 240 / maxHue;
+static const float maxT = 255;
+static size_t imageIndex = 0;
 
-    auto diags = flat(allIndexes(seq(1, dim[0] - 2, 2), seq(1, dim[1] - 2, 2)));
+void saveHeatMap(array heatMap) {
+
+    auto image = array(heatMap.dims(0), heatMap.dims(1), 3);
+    image(span, span, 0) = -blueHue / maxT * heatMap + blueHue; // hue
+    image(span, span, 1) = 1; // saturation max
+    image(span, span, 2) = 255; // valeur max
+
+    image = hsv2rgb(image);
+
+    std::stringstream ss;
+    ss << std::setfill('0') << std::setw(8) << imageIndex++ << ".png";
+    const std::string& fileName = ss.str();
+    saveImage(fileName.c_str(), image);
+}
+
+// En entree, le mask est l'ensemble des cases rouges et noirs sans la frontiere (Donc de taille n - 2 par m - 2)
+// Si une valeur est immuable alors la case est a vrai/1
+void initMutableIndexes(dim4 dim, const array& mask, array& redIndexes, array& blackIndexes) {
+
+    array allIndexes = iota(dim, dim4(1), u64)(seq(1, end - 1), seq(1, end - 1));
+    auto diags = constant(false, dim4(dim[0] - 2, dim[1] - 2), b8);
+
+    diags(seq(0, end, 2), seq(0, end, 2)) = true;
 
     if (dim[0] > 3 && dim[1] > 3) {
-        diags = join(0, diags, flat(allIndexes(seq(2, dim[0] - 2, 2), seq(2, dim[1] - 2, 2))));
+        diags(seq(1, end, 2), seq(1, end, 2)) = true;
     }
 
-    redIndexes = sort(diags(mask(diags).copy()));
-
-    // auto blackDiags = dim.elements() - 1 - diags;
-    blackIndexes = sort((dim.elements() - 1 - diags)(mask(dim.elements() - 1 - diags).copy()));
+    redIndexes = allIndexes(diags && !mask);
+    blackIndexes = allIndexes(!diags && !mask);
 }
 
 void sim() {
-    int n = 5;
-    int m = 8;
+    int n = 255;
+    int m = 6;
 
-    auto heatMap = iota(dim4(n, m), dim4(1, 1), u16);
+    auto heatMap = range(dim4(n, m)) * n / (n - 1);
+
+    saveHeatMap(heatMap);
 
     // auto t = iota(dim4(n, m), dim4(1, 1), u64);
 
@@ -64,15 +91,16 @@ void sim() {
     // heatMap(rouges, rouges) =
 
 
-    auto mask = randu(dim4(n, m), b8);
+    auto mask = randu(dim4(n - 2, m - 2), b8);
     array redIndexes;
     array blackIndexes;
     initMutableIndexes(dim4(n, m), mask, redIndexes, blackIndexes);
 
-    af_print(mask);
-    af_print(redIndexes);
-    af_print(blackIndexes);
+    // af_print(mask);
+    // af_print(redIndexes);
+    // af_print(blackIndexes);
 
+    af_print(heatMap);
 
     //af_print(redIndexes);
     //af_print(heatMap(redIndexes));

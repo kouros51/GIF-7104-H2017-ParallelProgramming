@@ -22,3 +22,7 @@ SourceFiles
 **.pdf
 
 tp5/thermal_sim
+tp5_cpu
+tp5_opencl
+tp5_unified
+tp5/*/*.png
