@@ -19,3 +19,9 @@ cmake ..
 make
 ```
 Les exécutables se trouvent dans le dossier "executables".
+```
+~/build/executables/tp5_cpu
+~/build/executables/tp5_cuda
+~/build/executables/tp5_opencl
+~/build/executables/tp5_unified
+```
