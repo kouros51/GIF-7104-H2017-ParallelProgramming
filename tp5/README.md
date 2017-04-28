@@ -18,7 +18,7 @@ cd build
 cmake ..
 make
 ```
-Les exécutables se trouvent dans le dossier "executables".
+Les exécutables sont générés selon le backend disponible et se trouvent dans le dossier "executables".
 ```
 ~/build/executables/tp5_cpu
 ~/build/executables/tp5_cuda
