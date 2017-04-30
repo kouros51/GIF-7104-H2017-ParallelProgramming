@@ -56,7 +56,11 @@ int main(int argc, char *argv[]) {
              */
 
             /** Initiatlization part*/
+<<<<<<< HEAD
             thermalSimulation simulation{atol(argv[1]), atol(argv[2]), atol(argv[5])};
+=======
+            thermalSimulation simulation{atol(argv[2]), atol(argv[3])};
+>>>>>>> 4b3bf2c237c6b4c3f52610df1f7a17d51eaf8c22
             simulation.initializeHeatMap();
             simulation.configSimulation(configFile);
 
