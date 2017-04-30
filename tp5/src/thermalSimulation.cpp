@@ -123,15 +123,15 @@ void thermalSimulation::propagate(const float threshold) {
             chrono.resume();
         }
 
-        (*nextHeatMap)(redIndexes) = ((*currentHeatMap)(redIndexes - 1) +
-                                                (*currentHeatMap)(redIndexes + 1) +
-                                                (*currentHeatMap)(redIndexes - row) +
-                                                (*currentHeatMap)(redIndexes + row)) / 4;
+        (*nextHeatMap)(redIndexes) =    ((*currentHeatMap)(redIndexes - 1) +
+                                        (*currentHeatMap)(redIndexes + 1) +
+                                        (*currentHeatMap)(redIndexes - row) +
+                                        (*currentHeatMap)(redIndexes + row)) / 4;
 
-        (*nextHeatMap)(blackIndexes) =   ((*nextHeatMap)(blackIndexes - 1) +
-                                                    (*nextHeatMap)(blackIndexes + 1) +
-                                                    (*nextHeatMap)(blackIndexes - row) +
-                                                    (*nextHeatMap)(blackIndexes + row)) / 4;
+        (*nextHeatMap)(blackIndexes) =  ((*nextHeatMap)(blackIndexes - 1) +
+                                        (*nextHeatMap)(blackIndexes + 1) +
+                                        (*nextHeatMap)(blackIndexes - row) +
+                                        (*nextHeatMap)(blackIndexes + row)) / 4;
 
         max = af::max<float>(*nextHeatMap - *currentHeatMap);
     }
