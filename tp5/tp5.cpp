@@ -3,7 +3,6 @@
 //
 
 #include <arrayfire.h>
-#include <istream>
 #include <iomanip>
 #include <fstream>
 
@@ -15,11 +14,8 @@ using namespace std;
 static const float maxHue = 360;
 static const float blueHue = 240 / maxHue;
 static const float maxT = 255;
-static size_t imageIndex = 0;
+unsigned int imageIndex = 0;
 
-
-//void initMutableIndexes(dim4 dim, const array &mask, array &redIndexes, array &blackIndexes);
-void saveHeatMap(af::array heatMap);
 
 void usage(char *inName);
 
@@ -68,7 +64,7 @@ int main(int argc, char *argv[]) {
             simulation.propagate(threshold);
 
 
-            /** Visualization, produce images, making video parts*/
+            /** Visualization, making video parts*/
         }
 
     } catch (af::exception &e) {

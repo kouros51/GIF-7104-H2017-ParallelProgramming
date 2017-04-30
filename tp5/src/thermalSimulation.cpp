@@ -4,7 +4,14 @@
 
 #include "headers/thermalSimulation.hpp"
 #include <fstream>
+#include <iomanip>
 
+static const float maxHue = 360;
+static const float blueHue = 240 / maxHue;
+static const float maxT = 255;
+static int imageIndex = 0;
+
+void saveHeatMap(af::array heatMap);
 
 void thermalSimulation::initializeHeatMap() {
     dim = af::dim4(row, col);
@@ -100,9 +107,11 @@ void thermalSimulation::propagate(const float threshold) {
         heatMap(blackIndexes) =
                 (heatMap(blackIndexes - 1) + heatMap(blackIndexes + 1) + heatMap(blackIndexes - row) +
                  heatMap(blackIndexes + row)) / 4;
+
+        saveHeatMap(heatMap);
+
+        std::cout << "index: "<< imageIndex << std::endl;
         comparingMatrix = heatMap - copyHeatMap;
-
-
         max = af::max<float>(af::max(comparingMatrix));
         std::cout << "The max difference now is: "<< max << std::endl;
 //    af_print(heatMap(redIndexes));
@@ -116,4 +125,20 @@ void thermalSimulation::propagate(const float threshold) {
     std::cout << "===== Finished simulation ======" << std::endl;
     std::cout << "Computation time: " << chrono.get() << "seconds." <<std::endl;
 
+}
+
+
+void saveHeatMap(const af::array heatMap) {
+
+    af::array image = af::array(heatMap.dims(0), heatMap.dims(1), 3);
+    image(af::span, af::span, 0) = -blueHue / maxT * heatMap + blueHue; // hue
+    image(af::span, af::span, 1) = 1; // saturation max
+    image(af::span, af::span, 2) = 255; // valeur max
+
+    image = af::hsv2rgb(image);
+
+    std::stringstream ss;
+    ss << "frames/" << std::setfill('0') << std::setw(8) << imageIndex++ << ".png";
+    const std::string& fileName = ss.str();
+    af::saveImage(fileName.c_str(), image);
 }
