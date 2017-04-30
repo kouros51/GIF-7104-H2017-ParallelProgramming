@@ -12,6 +12,11 @@ Le programme fait un appel system à ffmpeg pour générer la vidéo.
 ```
 mkdir build
 ```
+Ensuite dans ce dossier, créer un dossier "frames" afin de sauvegarder les images de la simulation :
+```
+mkdir build/frames
+```
+
 Se déplacer dans le dossier, générer le makefile avec cmake et compiler :
 ```
 cd build
@@ -21,7 +26,6 @@ make
 Les exécutables sont générés selon le backend disponible et se trouvent dans le dossier "executables".
 ```
 ~/build/executables/tp5_cpu
-~/build/executables/tp5_cuda
 ~/build/executables/tp5_opencl
 ~/build/executables/tp5_unified
 ```
