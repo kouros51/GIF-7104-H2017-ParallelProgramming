@@ -40,13 +40,13 @@ int main(int argc, char *argv[]) {
             usage(argv[0]);
         } else {
 
-            threshold = atof(argv[3]);
+            threshold = atof(argv[4]);
 
             /** Print Device information*/
             info();
 
             /** Load configuration file */
-            configFile = argv[4];
+            configFile = argv[1];
 
             /** Simulation steps using a thermalSimulation object.
              *  This object manage all the aspects of the simulation.
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
              */
 
             /** Initiatlization part*/
-            thermalSimulation simulation{atol(argv[1]), atol(argv[2]), atol(argv[5])};
+            thermalSimulation simulation{atol(argv[2]), atol(argv[3]), atol(argv[5])};
 
             simulation.initializeHeatMap();
             simulation.configSimulation(configFile);

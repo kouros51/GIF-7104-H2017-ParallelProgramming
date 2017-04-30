@@ -80,7 +80,7 @@ void thermalSimulation::configSimulation(const std::string configFile) {
     }
     std::cout << "===== After the configuration file======" << std::endl;
     // af_print(cellMask);
-    // af_print(heatMap);
+     af_print(heatMap);
 }
 
 void thermalSimulation::initMutableIndexes() {
