@@ -124,7 +124,6 @@ void thermalSimulation::propagate(const float threshold) {
 
 }
 
-
 void saveHeatMap(const af::array heatMap) {
 
     af::array image = af::array(heatMap.dims(0), heatMap.dims(1), 3);
@@ -132,7 +131,7 @@ void saveHeatMap(const af::array heatMap) {
     image(af::span, af::span, 1) = 1; // saturation max
     image(af::span, af::span, 2) = 255; // valeur max
 
-    image = af::scale(image,25.0f,25.0f);
+    image = af::scale(image,10.0f,10.0f);
 
     image = af::hsv2rgb(image);
 

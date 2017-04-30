@@ -5,7 +5,8 @@
 #include <arrayfire.h>
 #include <iomanip>
 #include <fstream>
-
+#include <libavcodec/avcodec.h>
+#include "libavutil/mathematics.h"
 #include "src/headers/thermalSimulation.hpp"
 
 using namespace af;
@@ -18,6 +19,8 @@ unsigned int imageIndex = 0;
 
 
 void usage(char *inName);
+
+void makeVideo();
 
 int main(int argc, char *argv[]) {
     /** Argument organisation of the array of argument "argv"
@@ -37,7 +40,7 @@ int main(int argc, char *argv[]) {
         if (argc < 2) {
             fprintf(stderr, "Error in one of the argument of the program");
             usage(argv[0]);
-        } else{
+        } else {
 
             threshold = atof(argv[4]);
 
@@ -65,6 +68,8 @@ int main(int argc, char *argv[]) {
 
 
             /** Visualization, making video parts*/
+//            a iplimenter???????????
+//            makeVideo("test");
         }
 
     } catch (af::exception &e) {
@@ -83,3 +88,6 @@ void usage(char *inName) {
             "cores = 1])" << std::endl;
     exit(1);
 }
+
+void makeVideo(){}
+
