@@ -108,16 +108,13 @@ void thermalSimulation::propagate(const float threshold) {
                 (heatMap(blackIndexes - 1) + heatMap(blackIndexes + 1) + heatMap(blackIndexes - row) +
                  heatMap(blackIndexes + row)) / 4;
 
+        chrono.pause();
         saveHeatMap(heatMap);
+        chrono.resume();
 
-        std::cout << "index: "<< imageIndex << std::endl;
+        af_print(heatMap);
         comparingMatrix = heatMap - copyHeatMap;
         max = af::max<float>(af::max(comparingMatrix));
-        std::cout << "The max difference now is: "<< max << std::endl;
-//    af_print(heatMap(redIndexes));
-//    af_print(heatMap(blackIndexes));
-        af_print(heatMap);
-//        af_print(comparingMatrix);
     }
 
     chrono.pause();
@@ -134,6 +131,8 @@ void saveHeatMap(const af::array heatMap) {
     image(af::span, af::span, 0) = -blueHue / maxT * heatMap + blueHue; // hue
     image(af::span, af::span, 1) = 1; // saturation max
     image(af::span, af::span, 2) = 255; // valeur max
+
+    image = af::scale(image,25.0f,25.0f);
 
     image = af::hsv2rgb(image);
 
