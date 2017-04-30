@@ -24,7 +24,7 @@ void saveHeatMap(array heatMap) {
     image = hsv2rgb(image);
 
     std::stringstream ss;
-    ss << std::setfill('0') << std::setw(8) << imageIndex++ << ".png";
+    ss << "frames/" << std::setfill('0') << std::setw(10) << imageIndex++ << ".png";
     const std::string& fileName = ss.str();
     saveImage(fileName.c_str(), image);
 }
@@ -70,7 +70,7 @@ void initMutableIndexes(dim4 dim, const array& mask, array& redIndexes, array& b
 }
 
 void sim(std::string maskFile) {
-    int n = 255;
+    int n = 8;
     int m = 6;
 
     auto heatMap = range(dim4(n, m)) * n / (n - 1);
@@ -119,7 +119,7 @@ void sim(std::string maskFile) {
     print("Mask", mask);
     array redIndexes;
     array blackIndexes;
-    //initMutableIndexes(dim4(n, m), mask, redIndexes, blackIndexes);
+    initMutableIndexes(dim4(n, m), mask, redIndexes, blackIndexes);
 
     // af_print(mask);
     // af_print(redIndexes);
@@ -141,12 +141,12 @@ void sim(std::string maskFile) {
 
 void usage(char *inName) {
     std::cout << std::endl << "Usage> " << inName << " config_mat_file, [dimension_matrix"
-            " = 100], [max_var_treshold = 1*10^-3], [iteration_image = 1], [max_"
+            " = 100 100], [max_var_treshold = 1*10^-3], [iteration_image = 1], [max_"
             "cores = 1]" << std::endl;
     exit(1);
 }
 
-int main(int argc, char *argv[]) // argv: 1= maskFile, 2=dimensions, 3=threshold, 4=iterations/image, 5=#ofCores
+int main(int argc, char *argv[]) // argv: 1= configFile, 2=dimensions, 3=threshold, 4=iterations/image, 5=#ofCores
 {
 
     if (argc < 2) usage(argv[0]);
