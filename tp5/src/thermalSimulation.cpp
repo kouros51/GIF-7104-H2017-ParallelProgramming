@@ -100,6 +100,9 @@ void thermalSimulation::propagate(const float threshold) {
     float max = af::max<float>(af::max(copyHeatMap));
 
     while (max >= threshold) {
+        chrono.pause();
+        saveHeatMap(heatMap);
+        chrono.resume();
         copyHeatMap = heatMap.copy();
         heatMap(redIndexes) =
                 (heatMap(redIndexes + 1) + heatMap(redIndexes + 1) + heatMap(redIndexes - row) +
@@ -107,10 +110,6 @@ void thermalSimulation::propagate(const float threshold) {
         heatMap(blackIndexes) =
                 (heatMap(blackIndexes - 1) + heatMap(blackIndexes + 1) + heatMap(blackIndexes - row) +
                  heatMap(blackIndexes + row)) / 4;
-
-        chrono.pause();
-        saveHeatMap(heatMap);
-        chrono.resume();
 
         af_print(heatMap);
         comparingMatrix = heatMap - copyHeatMap;
