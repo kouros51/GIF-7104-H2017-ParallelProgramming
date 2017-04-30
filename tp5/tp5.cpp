@@ -5,8 +5,6 @@
 #include <arrayfire.h>
 #include <iomanip>
 #include <fstream>
-#include <libavcodec/avcodec.h>
-#include "libavutil/mathematics.h"
 #include "src/headers/thermalSimulation.hpp"
 
 using namespace af;
@@ -42,13 +40,13 @@ int main(int argc, char *argv[]) {
             usage(argv[0]);
         } else {
 
-            threshold = atof(argv[4]);
+            threshold = atof(argv[3]);
 
             /** Print Device information*/
             info();
 
             /** Load configuration file */
-            configFile = argv[1];
+            configFile = argv[4];
 
             /** Simulation steps using a thermalSimulation object.
              *  This object manage all the aspects of the simulation.
@@ -58,7 +56,7 @@ int main(int argc, char *argv[]) {
              */
 
             /** Initiatlization part*/
-            thermalSimulation simulation{atoi(argv[2]), atoi(argv[3])};
+            thermalSimulation simulation{atol(argv[1]), atol(argv[2])};
             simulation.initializeHeatMap();
             simulation.configSimulation(configFile);
 
@@ -69,7 +67,7 @@ int main(int argc, char *argv[]) {
 
             /** Visualization, making video parts*/
 //            a iplimenter???????????
-//            makeVideo("test");
+            makeVideo();
         }
 
     } catch (af::exception &e) {
@@ -89,5 +87,7 @@ void usage(char *inName) {
     exit(1);
 }
 
-void makeVideo(){}
+void makeVideo(){
+    system("ffmpeg -loglevel quiet -r 10 -i frames/%8d.png video/video.mp4");
+}
 

@@ -11,15 +11,15 @@
 class thermalSimulation {
 public:
     Chrono chrono;
-    unsigned int row;
-    unsigned int col;
+    unsigned long row;
+    unsigned long col;
     af::dim4 dim;
     af::array heatMap;
     af::array cellMask;
     af::array redIndexes;
     af::array blackIndexes;
 
-    thermalSimulation(unsigned int r, unsigned int c):row(r), col(c){
+    thermalSimulation(long r, long c):row(r), col(c){
         std::cout<< "Creating simulation object!!"<< std::endl;
         std::cout<< "Chronometer for performance measure was initiated, Chrono=" << chrono.get() << std::endl;
         std::cout<< "# Rows: " << row << std::endl;
