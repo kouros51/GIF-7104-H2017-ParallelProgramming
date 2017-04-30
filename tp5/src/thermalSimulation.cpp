@@ -105,7 +105,7 @@ void thermalSimulation::propagate(const float threshold) {
         chrono.resume();
         copyHeatMap = heatMap.copy();
         heatMap(redIndexes) =
-                (heatMap(redIndexes + 1) + heatMap(redIndexes + 1) + heatMap(redIndexes - row) +
+                (heatMap(redIndexes + 1) + heatMap(redIndexes - 1) + heatMap(redIndexes - row) +
                  heatMap(redIndexes + row)) / 4;
         heatMap(blackIndexes) =
                 (heatMap(blackIndexes - 1) + heatMap(blackIndexes + 1) + heatMap(blackIndexes - row) +
