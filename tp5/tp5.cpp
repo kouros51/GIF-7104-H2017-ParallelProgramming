@@ -56,11 +56,12 @@ int main(int argc, char *argv[]) {
              */
 
             /** Initiatlization part*/
-            thermalSimulation simulation{atol(argv[1]), atol(argv[2])};
+            thermalSimulation simulation{atol(argv[1]), atol(argv[2]), atol(argv[5])};
             simulation.initializeHeatMap();
             simulation.configSimulation(configFile);
 
             /** Simulation part*/
+            std::cout << "===== Start Simulation ======" << std::endl;
             simulation.initMutableIndexes();
             simulation.propagate(threshold);
 
@@ -88,6 +89,6 @@ void usage(char *inName) {
 }
 
 void makeVideo(){
-    system("ffmpeg -loglevel quiet -r 10 -i frames/%8d.png video/video.mp4");
+    system("ffmpeg -loglevel quiet -r 10 -i frames/%8d.png -y video/video.mp4");
 }
 
