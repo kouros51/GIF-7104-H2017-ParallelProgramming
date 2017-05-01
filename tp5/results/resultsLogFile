@@ -1,0 +1,543 @@
+Experimentation script for GIF-7104 TP5 - 2D Thermal Simulation
+ 
+Building the program
+-- The C compiler identification is GNU 6.3.1
+-- The CXX compiler identification is GNU 6.3.1
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/kouros51/Development/GIF-7104-H2017-ParallelProgramming/GIF-7104-H2017-ParallelProgramming/tp5/build
+Scanning dependencies of target tp5_cpu_sequential
+[ 16%] Building CXX object CMakeFiles/tp5_cpu_sequential.dir/tp5.cpp.o
+[ 33%] Linking CXX executable executables/tp5_cpu_sequential
+[ 33%] Built target tp5_cpu_sequential
+Scanning dependencies of target tp5_unified
+[ 50%] Building CXX object CMakeFiles/tp5_unified.dir/tp5.cpp.o
+[ 66%] Linking CXX executable executables/tp5_unified
+[ 66%] Built target tp5_unified
+Scanning dependencies of target tp5_opencl
+[ 83%] Building CXX object CMakeFiles/tp5_opencl.dir/tp5.cpp.o
+[100%] Linking CXX executable executables/tp5_opencl
+[100%] Built target tp5_opencl
+Building succeeded.
+___________________
+ For those tests we will fix the video 10 frame/sec
+
+Sequential tests:
+=================
+
+
+===> matrix:100*100 threshold:1
+Number of rows: 100
+Number of columns: 100
+Frame save interval: 10
+Threshold: 1
+Configuration file location: 1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:120, Column:120 is outside the matrix!
+Row:120, Column:121 is outside the matrix!
+Row:121, Column:120 is outside the matrix!
+Row:121, Column:121 is outside the matrix!
+Row:20, Column:250 is outside the matrix!
+Row:50, Column:250 is outside the matrix!
+Row:80, Column:250 is outside the matrix!
+Row:110, Column:250 is outside the matrix!
+Row:140, Column:250 is outside the matrix!
+Row:170, Column:250 is outside the matrix!
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.0578687seconds.
+
+
+===> matrix:200*300 threshold:1
+Number of rows: 200
+Number of columns: 300
+Frame save interval: 10
+Threshold: 1
+Configuration file location: 1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.305228seconds.
+
+
+===> matrix:500*600 threshold:1
+Number of rows: 500
+Number of columns: 600
+Frame save interval: 10
+Threshold: 1
+Configuration file location: 1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 1.42242seconds.
+
+
+===> matrix:100*100 threshold:0.1
+Number of rows: 100
+Number of columns: 100
+Frame save interval: 10
+Threshold: 0.1
+Configuration file location: 0.1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:120, Column:120 is outside the matrix!
+Row:120, Column:121 is outside the matrix!
+Row:121, Column:120 is outside the matrix!
+Row:121, Column:121 is outside the matrix!
+Row:20, Column:250 is outside the matrix!
+Row:50, Column:250 is outside the matrix!
+Row:80, Column:250 is outside the matrix!
+Row:110, Column:250 is outside the matrix!
+Row:140, Column:250 is outside the matrix!
+Row:170, Column:250 is outside the matrix!
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.387506seconds.
+
+
+===> matrix:200*300 threshold:0.1
+Number of rows: 200
+Number of columns: 300
+Frame save interval: 10
+Threshold: 0.1
+Configuration file location: 0.1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 2.31389seconds.
+
+
+===> matrix:500*600 threshold:0.1
+Number of rows: 500
+Number of columns: 600
+Frame save interval: 10
+Threshold: 0.1
+Configuration file location: 0.1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 13.4159seconds.
+
+
+===> matrix:100*100 threshold:0.01
+Number of rows: 100
+Number of columns: 100
+Frame save interval: 10
+Threshold: 0.01
+Configuration file location: 0.01
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:120, Column:120 is outside the matrix!
+Row:120, Column:121 is outside the matrix!
+Row:121, Column:120 is outside the matrix!
+Row:121, Column:121 is outside the matrix!
+Row:20, Column:250 is outside the matrix!
+Row:50, Column:250 is outside the matrix!
+Row:80, Column:250 is outside the matrix!
+Row:110, Column:250 is outside the matrix!
+Row:140, Column:250 is outside the matrix!
+Row:170, Column:250 is outside the matrix!
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 2.23104seconds.
+
+
+===> matrix:200*300 threshold:0.01
+Number of rows: 200
+Number of columns: 300
+Frame save interval: 10
+Threshold: 0.01
+Configuration file location: 0.01
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 27.0755seconds.
+
+
+===> matrix:500*600 threshold:0.01
+Number of rows: 500
+Number of columns: 600
+Frame save interval: 10
+Threshold: 0.01
+Configuration file location: 0.01
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (CPU, 64-bit Linux, build 03fc1867)
+[0] Intel: Intel(R) Core(TM) i7-4720HQ CPU @ 2.60GHz, 7436 MB, Max threads(8) 
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 158.654seconds.
+################### Sequential tests finished #####################
+###################################################################
+
+Parallel tests
+==============
+
+
+===> matrix:100*100 threshold:1
+Number of rows: 100
+Number of columns: 100
+Frame save interval: 10
+Threshold: 1
+Configuration file location: 1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:120, Column:120 is outside the matrix!
+Row:120, Column:121 is outside the matrix!
+Row:121, Column:120 is outside the matrix!
+Row:121, Column:121 is outside the matrix!
+Row:20, Column:250 is outside the matrix!
+Row:50, Column:250 is outside the matrix!
+Row:80, Column:250 is outside the matrix!
+Row:110, Column:250 is outside the matrix!
+Row:140, Column:250 is outside the matrix!
+Row:170, Column:250 is outside the matrix!
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.0159692seconds.
+
+
+===> matrix:200*300 threshold:1
+Number of rows: 200
+Number of columns: 300
+Frame save interval: 10
+Threshold: 1
+Configuration file location: 1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.03507seconds.
+
+
+===> matrix:500*600 threshold:1
+Number of rows: 500
+Number of columns: 600
+Frame save interval: 10
+Threshold: 1
+Configuration file location: 1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.165356seconds.
+
+
+===> matrix:100*100 threshold:0.1
+Number of rows: 100
+Number of columns: 100
+Frame save interval: 10
+Threshold: 0.1
+Configuration file location: 0.1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:120, Column:120 is outside the matrix!
+Row:120, Column:121 is outside the matrix!
+Row:121, Column:120 is outside the matrix!
+Row:121, Column:121 is outside the matrix!
+Row:20, Column:250 is outside the matrix!
+Row:50, Column:250 is outside the matrix!
+Row:80, Column:250 is outside the matrix!
+Row:110, Column:250 is outside the matrix!
+Row:140, Column:250 is outside the matrix!
+Row:170, Column:250 is outside the matrix!
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.0945869seconds.
+
+
+===> matrix:200*300 threshold:0.1
+Number of rows: 200
+Number of columns: 300
+Frame save interval: 10
+Threshold: 0.1
+Configuration file location: 0.1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.233771seconds.
+
+
+===> matrix:500*600 threshold:0.1
+Number of rows: 500
+Number of columns: 600
+Frame save interval: 10
+Threshold: 0.1
+Configuration file location: 0.1
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 1.40693seconds.
+
+
+===> matrix:100*100 threshold:0.01
+Number of rows: 100
+Number of columns: 100
+Frame save interval: 10
+Threshold: 0.01
+Configuration file location: 0.01
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:120, Column:120 is outside the matrix!
+Row:120, Column:121 is outside the matrix!
+Row:121, Column:120 is outside the matrix!
+Row:121, Column:121 is outside the matrix!
+Row:20, Column:250 is outside the matrix!
+Row:50, Column:250 is outside the matrix!
+Row:80, Column:250 is outside the matrix!
+Row:110, Column:250 is outside the matrix!
+Row:140, Column:250 is outside the matrix!
+Row:170, Column:250 is outside the matrix!
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 0.528246seconds.
+
+
+===> matrix:200*300 threshold:0.01
+Number of rows: 200
+Number of columns: 300
+Frame save interval: 10
+Threshold: 0.01
+Configuration file location: 0.01
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+Row:200, Column:250 is outside the matrix!
+Row:230, Column:250 is outside the matrix!
+Row:260, Column:250 is outside the matrix!
+Row:290, Column:250 is outside the matrix!
+Row:10, Column:390 is outside the matrix!
+Row:11, Column:390 is outside the matrix!
+Row:10, Column:391 is outside the matrix!
+Row:11, Column:391 is outside the matrix!
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 2.58857seconds.
+
+
+===> matrix:500*600 threshold:0.01
+Number of rows: 500
+Number of columns: 600
+Frame save interval: 10
+Threshold: 0.01
+Configuration file location: 0.01
+Cleaning/Creating working directories.
+
+ArrayFire v3.4.2 (OpenCL, 64-bit Linux, build 03fc1867)
+[0] NVIDIA  : GeForce GTX 950M, 4044 MB
+Creating simulation object!!
+Chronometer for performance measure was initiated, Chrono=0
+Opening configuration file succeeded:../configs/configFile
+======= Simulation configuration succeeded 	 ======
+======= Start Simulation 	======
+======= Finished simulation 	======
+Computation time: 15.8076seconds.
+################### Parallel tests finished #######################
+###################################################################

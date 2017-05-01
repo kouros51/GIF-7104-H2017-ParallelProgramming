@@ -135,6 +135,6 @@ void thermalSimulation::propagate(const float threshold) {
     chrono.pause();
 
     std::cout << "======= Finished simulation \t======" << std::endl;
-    std::cout << "Computation time: " << chrono.get() << "seconds." << std::endl;
+    std::cout << "Computation time: " << chrono.get() << " seconds." << std::endl;
 
 }
