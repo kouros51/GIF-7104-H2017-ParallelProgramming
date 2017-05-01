@@ -43,7 +43,13 @@ int main(int argc, char *argv[]) {
         std::cout   << "Number of rows: " << rows << std::endl
                     << "Number of columns: " << cols << std::endl
                     << "Frame save interval: " << saveInterval << std::endl
-                    << "Threshold: " << threshold << std::endl;
+                    << "Threshold: " << threshold << std::endl
+                    << "Configuration file location: " << threshold << std::endl;
+
+        /** Cleaning working directory */
+        std::cout << "Cleaning working directories.\n" << std::endl;
+        system("rm -f frames/*");
+        system("rm -f video/*");
 
         /** Print Device information*/
         info();
@@ -62,7 +68,7 @@ int main(int argc, char *argv[]) {
         simulation.configSimulation(configFile);
 
         /** Simulation part*/
-        std::cout << "===== Start Simulation ======" << std::endl;
+        std::cout << "======= Start Simulation \t======" << std::endl;
         simulation.initMutableIndexes();
         simulation.propagate(threshold);
         generateVideo();
@@ -77,9 +83,7 @@ int main(int argc, char *argv[]) {
 }
 
 void usage(char *inName) {
-    std::cout << std::endl << "Usage> " << inName << ": (config_mat_file, [dimension_matrix"
-            " = 100 100], [max_var_treshold = 1*10^-2], [iteration_image = 1], [max_"
-            "cores = 1])" << std::endl;
+    std::cout << std::endl << "Usage> " << inName << " -d [défault : 100 100] -s [default : 0.01] -f [default : ../configs/configFile] -i  i [default : 1]" << std::endl;
     exit(1);
 }
 
