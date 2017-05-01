@@ -40,8 +40,7 @@ int main(int argc, char *argv[]) {
         optionRef = std::find(args.begin(), args.end(), "-i");
         long saveInterval = optionRef != args.end() ? atol(optionRef[1].c_str()) : 1;
 
-        std::cout   << "Number of rows: " << rows << std::endl
-                    << "Number of columns: " << cols << std::endl
+        std::cout   << "Size: " << rows  << "x" << cols << std::endl
                     << "Frame save interval: " << saveInterval << std::endl
                     << "Threshold: " << threshold << std::endl;
 
