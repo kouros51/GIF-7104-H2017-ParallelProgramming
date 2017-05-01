@@ -56,7 +56,6 @@ int main(int argc, char *argv[]) {
             /** Print Device information*/
             info();
 
-
             /** Simulation steps using a thermalSimulation object.
              *  This object manage all the aspects of the simulation.
              *  The times spend in loading configuration saving images
@@ -97,4 +96,3 @@ void usage(char *inName) {
 void generateVideo(){
     system("ffmpeg -loglevel quiet -r 10 -i frames/%8d.png -y video/video.mp4");
 }
-

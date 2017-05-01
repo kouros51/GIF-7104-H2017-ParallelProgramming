@@ -113,17 +113,6 @@ void thermalSimulation::propagate(const float threshold) {
 
     float max = std::numeric_limits<float>::infinity();
 
-    // auto redNorth = redIndexes - 1;
-    // auto redSouth = redIndexes + 1;
-    // auto redEast = redIndexes + row;
-    // auto redWest = redIndexes - row;
-
-    // auto blackNorth = blackIndexes - 1;
-    // auto blackSouth = blackIndexes + 1;
-    // auto blackEast = blackIndexes + row;
-    // auto blackWest = blackIndexes - row;
-
-
     for (unsigned long i = 0, c = 0; max >= threshold ; c++, i = 1 - i) {
         auto currentHeatMap = deltaHeatMaps[i];
         auto nextHeatMap = deltaHeatMaps[1 - i];
