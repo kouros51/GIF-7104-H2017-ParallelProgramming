@@ -17,7 +17,7 @@ Ensuite dans ce dossier, créer un dossier "frames" afin de sauvegarder les imag
 mkdir build/frames
 ```
 
-Dans le même dossier, créer un dossier "video" afin de générer la video:
+Dans le même dossier, créer un dossier "video" afin de générer la video :
 ```
 mkdir build/video
 ```
