@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
             /** Print Device information*/
             info();
 
+
             /** Simulation steps using a thermalSimulation object.
              *  This object manage all the aspects of the simulation.
              *  The times spend in loading configuration saving images

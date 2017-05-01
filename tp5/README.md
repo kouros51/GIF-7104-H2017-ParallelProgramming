@@ -17,6 +17,12 @@ Ensuite dans ce dossier, créer un dossier "frames" afin de sauvegarder les imag
 mkdir build/frames
 ```
 
+Dans le même dossier, créer un dossier "video" afin de sauvegarder la video crée par la simulation:
+```
+mkdir build/video
+
+```
+
 Se déplacer dans le dossier, générer le makefile avec cmake et compiler :
 ```
 cd build
