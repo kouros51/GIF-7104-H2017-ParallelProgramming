@@ -72,7 +72,7 @@ ELSE()
     MESSAGE(STATUS "EXAMPLES: UNIFIED backend is OFF. af was not found.")
 ENDIF()
 
-
+# Next we build each example using OpenCL backend.
 IF (${OpenCL_FOUND})
     IF(${ArrayFire_OpenCL_FOUND})  # variable defined by FIND(ArrayFire ...)
         OPTION(BUILD_OPENCL "Build ArrayFire Examples for OpenCL backend" ON)
@@ -84,4 +84,47 @@ IF (${OpenCL_FOUND})
     ENDIF()
 ELSE()
     MESSAGE(STATUS "EXAMPLES: OpenCL backend is OFF. OpenCL was not found")
+ENDIF()
+
+
+# Next we build each example using CUDA backend.
+IF (${CUDA_FOUND})
+    IF(${ArrayFire_CUDA_FOUND})  # variable defined by FIND(ArrayFire ...)
+        # Find NVVM
+        FIND_LIBRARY(CUDA_nvvm_LIBRARY
+                NAMES "nvvm"
+                PATH_SUFFIXES "nvvm/lib64" "nvvm/lib" "nvvm/lib/x64"
+                PATHS ${CUDA_TOOLKIT_ROOT_DIR}
+                DOC "CUDA NVVM Library"
+                )
+        MARK_AS_ADVANCED(CUDA_nvvm_LIBRARY)
+
+        # If CUDA_CUDA_LIBRARY is not found, check for Stub in CUDA Toolkit
+        IF(NOT CUDA_CUDA_LIBRARY)
+            MESSAGE(SEND_ERROR "CMake CUDA Variable CUDA_CUDA_LIBRARY Not found.")
+            MESSAGE("CUDA Driver Library (libcuda.so/libcuda.dylib/cuda.lib) cannot be found.")
+            FIND_FILE(CUDA_CUDA_LIBRARY_STUB
+                    NAMES "libcuda.so" "libcuda.dylib" "cuda.lib"
+                    PATHS ${CUDA_TOOLKIT_ROOT_DIR}
+                    PATH_SUFFIXES "lib64" "lib64/stubs" "lib" "lib/stubs" "lib/x64" "lib/Win32"
+                    DOC "CUDA Library STUB"
+                    )
+            IF(CUDA_CUDA_LIBRARY_STUB)
+                MESSAGE("You can use the library stub available in the CUDA Toolkit: ${CUDA_CUDA_LIBRARY_STUB}")
+                MESSAGE("Run the following commands (Linux) to set it up:")
+                MESSAGE("ln -s ${CUDA_CUDA_LIBRARY_STUB} /usr/lib/libcuda.so.1")
+                MESSAGE("ln -s /usr/lib/libcuda.so.1 /usr/lib/libcuda.so")
+            ENDIF()
+            MESSAGE(FATAL_ERROR "Ending CMake configuration because of missing CUDA_CUDA_LIBRARY")
+        ENDIF(NOT CUDA_CUDA_LIBRARY)
+
+        OPTION(BUILD_CUDA "Build ArrayFire Examples for CUDA backend" ON)
+        BUILD_SIMULATION("${EXECUTABLE_NAME}" ${FILES} cuda ${ArrayFire_CUDA_LIBRARIES} "${CUDA_CUBLAS_LIBRARIES};${CUDA_LIBRARIES};${CUDA_cusolver_LIBRARY};${CUDA_cusparse_LIBRARY};${CUDA_CUFFT_LIBRARIES};${CUDA_nvvm_LIBRARY};${CUDA_CUDA_LIBRARY}" ${SIMULATION_LIBRARIES} "")
+    ELSEIF(TARGET afcuda)        # variable defined by the ArrayFire build tree
+        BUILD_SIMULATION("${EXECUTABLE_NAME}" ${FILES} cuda afcuda "" ${SIMULATION_LIBRARIES} "")
+    ELSE()
+        MESSAGE(STATUS "EXAMPLES: CUDA backend is OFF. afcuda was not found")
+    ENDIF()
+ELSE()
+    MESSAGE(STATUS "EXAMPLES: CUDA backend is OFF. CUDA was not found")
 ENDIF()
