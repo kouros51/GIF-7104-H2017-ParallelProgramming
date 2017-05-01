@@ -40,11 +40,11 @@ int main(int argc, char *argv[]) {
         optionRef = std::find(args.begin(), args.end(), "-i");
         long saveInterval = optionRef != args.end() ? atol(optionRef[1].c_str()) : 1;
 
-        std::cout   << "Number of rows: " << rows << std::endl
-                    << "Number of columns: " << cols << std::endl
-                    << "Frame save interval: " << saveInterval << std::endl
-                    << "Threshold: " << threshold << std::endl
-                    << "Configuration file location: " << threshold << std::endl;
+        std::cout << "Number of rows: " << rows << std::endl
+                  << "Number of columns: " << cols << std::endl
+                  << "Frame save interval: " << saveInterval << std::endl
+                  << "Threshold: " << threshold << std::endl
+                  << "Configuration file location: " << threshold << std::endl;
 
         /** Cleaning working directory */
         std::cout << "Cleaning working directories.\n" << std::endl;
@@ -83,10 +83,12 @@ int main(int argc, char *argv[]) {
 }
 
 void usage(char *inName) {
-    std::cout << std::endl << "Usage> " << inName << " -d [défault : 100 100] -s [default : 0.01] -f [default : ../configs/configFile] -i  i [default : 1]" << std::endl;
+    std::cout << std::endl << "Usage> " << inName
+              << " -d [défault : 100 100] -s [default : 0.01] -f [default : ../configs/configFile] -i  i [default : 1]"
+              << std::endl;
     exit(1);
 }
 
-void generateVideo(){
+void generateVideo() {
     system("ffmpeg -loglevel quiet -r 10 -i frames/%8d.png -y video/video.mp4");
 }

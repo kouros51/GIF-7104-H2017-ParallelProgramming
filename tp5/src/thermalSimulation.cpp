@@ -81,7 +81,6 @@ void thermalSimulation::configSimulation(const std::string configFile) {
     }
 
 
-
     std::cout << "======= Simulation configuration succeeded \t ======" << std::endl;
 //    af_print(cellMask);
 //     af_print(heatMap);

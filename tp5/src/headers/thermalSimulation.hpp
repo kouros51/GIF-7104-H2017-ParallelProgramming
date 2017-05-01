@@ -21,15 +21,19 @@ public:
     af::array blackIndexes;
     af::array image;
 
-    thermalSimulation(long r, long c, long i):row(r), col(c), saveInterval(i), image(row, col, 3){
-        std::cout << "Creating simulation object!!"<< std::endl;
+    thermalSimulation(long r, long c, long i) : row(r), col(c), saveInterval(i), image(row, col, 3) {
+        std::cout << "Creating simulation object!!" << std::endl;
         std::cout << "Chronometer for performance measure was initiated, Chrono=" << chrono.get() << std::endl;
     };
 
     void initializeHeatMap();
+
     void configSimulation(const std::string configFile);
+
     void initMutableIndexes();
+
     void propagate(const float threshold);
+
     void saveHeatMap(const af::array changedHeatMap);
 };
 
