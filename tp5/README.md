@@ -1,4 +1,4 @@
-#GIF-7104 - Simulation thermique 2D
+# GIF-7104 - Simulation thermique 2D
 Vincent, Thierry et Houssem.
 
 ### Prérequis
