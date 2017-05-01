@@ -17,10 +17,9 @@ Ensuite dans ce dossier, créer un dossier "frames" afin de sauvegarder les imag
 mkdir build/frames
 ```
 
-Dans le même dossier, créer un dossier "video" afin de sauvegarder la video crée par la simulation:
+Dans le même dossier, créer un dossier "video" afin de générer la video :
 ```
 mkdir build/video
-
 ```
 
 Se déplacer dans le dossier, générer le makefile avec cmake et compiler :
@@ -47,8 +46,7 @@ Puisque c'est un algorithme massivement parralèle, on ne peut pas changer le no
 #### Exemple
 ```
     $ ./executables/tp5_opencl -d 150 100 -s 0.001 -f ../configs/configFile -i 15
-Number of rows: 150
-Number of columns: 100
+Size: 150x100
 Frame save interval: 15
 Threshold: 0.001
 ```
