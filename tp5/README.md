@@ -24,6 +24,7 @@ Les exécutables sont générés selon le backend disponible et se trouvent dans
 ~/build/executables/tp5_opencl
 ~/build/executables/tp5_unified
 ```
+S'assurer que les exécutables ont les permissions pour supprimer et créer des fichiers.
 ### Lancer
 Lancer avec les options suivantes :
 ```
