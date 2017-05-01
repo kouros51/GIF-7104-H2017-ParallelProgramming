@@ -77,6 +77,7 @@ void thermalSimulation::configSimulation(const std::string configFile) {
         }
     } else {
         std::cout << "Opening configuration file failed . Check the file or the location" << std::endl;
+        exit(1);
     }
     std::cout << "===== After the configuration file======" << std::endl;
     // af_print(cellMask);
@@ -99,9 +100,6 @@ void thermalSimulation::initMutableIndexes() {
     redIndexes = allIndexes(diags && !cellMask);
     blackIndexes = allIndexes(!diags && !cellMask);
     chrono.pause();
-//    af_print(allIndexes);
-//    af_print(redIndexes);
-//    af_print(blackIndexes);
 }
 
 void thermalSimulation::propagate(const float threshold) {

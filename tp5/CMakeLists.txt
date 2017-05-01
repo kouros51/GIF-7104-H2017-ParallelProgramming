@@ -54,7 +54,7 @@ ADD_DEFINITIONS("-DASSETS_DIR=\"${ASSETS_DIR}\"")
 # Next we build each example using CPU backend.
 IF(${ArrayFire_CPU_FOUND})  # variable defined by FIND(ArrayFire ...)
     OPTION(BUILD_CPU "Build ArrayFire Examples for CPU backend" ON)
-    BUILD_SIMULATION("${EXECUTABLE_NAME}" ${FILES} cpu ${ArrayFire_CPU_LIBRARIES} "" ${SIMULATION_LIBRARIES} "")
+    BUILD_SIMULATION("${EXECUTABLE_NAME}" ${FILES} cpu_sequential ${ArrayFire_CPU_LIBRARIES} "" ${SIMULATION_LIBRARIES} "")
 ELSEIF(TARGET afcpu)        # variable defined by the ArrayFire build tree
     BUILD_SIMULATION("${EXECUTABLE_NAME}" ${FILES} cpu afcpu "" ${SIMULATION_LIBRARIES} "")
 ELSE()
