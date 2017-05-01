@@ -38,7 +38,7 @@ void thermalSimulation::configSimulation(const std::string configFile) {
     std::string line;
 
     cellMask = af::constant(false, row - 2, col - 2, b8);
-    af_print(cellMask);
+    // af_print(cellMask);
 
     configIn.open(configFile);
     if (configIn.is_open()) {
@@ -111,8 +111,19 @@ void thermalSimulation::propagate(const float threshold) {
     auto heatMapCopy = heatMap.copy();
     af::array* deltaHeatMaps[2] = {&heatMap, &heatMapCopy};
 
-    // float max = af::max<float>(af::max(alternateHeatMap));
     float max = std::numeric_limits<float>::infinity();
+
+    // auto redNorth = redIndexes - 1;
+    // auto redSouth = redIndexes + 1;
+    // auto redEast = redIndexes + row;
+    // auto redWest = redIndexes - row;
+
+    // auto blackNorth = blackIndexes - 1;
+    // auto blackSouth = blackIndexes + 1;
+    // auto blackEast = blackIndexes + row;
+    // auto blackWest = blackIndexes - row;
+
+
     for (unsigned long i = 0, c = 0; max >= threshold ; c++, i = 1 - i) {
         auto currentHeatMap = deltaHeatMaps[i];
         auto nextHeatMap = deltaHeatMaps[1 - i];

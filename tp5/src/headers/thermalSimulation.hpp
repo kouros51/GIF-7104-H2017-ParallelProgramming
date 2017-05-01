@@ -22,10 +22,8 @@ public:
     af::array image;
 
     thermalSimulation(long r, long c, long i):row(r), col(c), saveInterval(i), image(row, col, 3){
-        std::cout<< "Creating simulation object!!"<< std::endl;
-        std::cout<< "Chronometer for performance measure was initiated, Chrono=" << chrono.get() << std::endl;
-        std::cout<< "# Rows: " << row << std::endl;
-        std::cout<< "# Column: " << col << std::endl;
+        std::cout << "Creating simulation object!!"<< std::endl;
+        std::cout << "Chronometer for performance measure was initiated, Chrono=" << chrono.get() << std::endl;
     };
 
     void initializeHeatMap();
