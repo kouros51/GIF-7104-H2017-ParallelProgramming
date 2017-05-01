@@ -22,7 +22,7 @@ void thermalSimulation::saveHeatMap(const af::array changedHeatMap) {
 
     std::stringstream ss;
     ss << "frames/" << std::setfill('0') << std::setw(8) << imageIndex++ << ".png";
-    const std::string& fileName = ss.str();
+    const std::string &fileName = ss.str();
     af::saveImage(fileName.c_str(), image);
 }
 
@@ -79,9 +79,11 @@ void thermalSimulation::configSimulation(const std::string configFile) {
         std::cout << "Opening configuration file failed . Check the file or the location" << std::endl;
         exit(1);
     }
-    std::cout << "===== After the configuration file======" << std::endl;
-    // af_print(cellMask);
-     af_print(heatMap);
+
+
+    std::cout << "======= Simulation configuration succeeded \t ======" << std::endl;
+//    af_print(cellMask);
+//     af_print(heatMap);
 }
 
 void thermalSimulation::initMutableIndexes() {
@@ -107,11 +109,11 @@ void thermalSimulation::propagate(const float threshold) {
     chrono.resume();
 
     auto heatMapCopy = heatMap.copy();
-    af::array* deltaHeatMaps[2] = {&heatMap, &heatMapCopy};
+    af::array *deltaHeatMaps[2] = {&heatMap, &heatMapCopy};
 
     float max = std::numeric_limits<float>::infinity();
 
-    for (unsigned long i = 0, c = 0; max >= threshold ; c++, i = 1 - i) {
+    for (unsigned long i = 0, c = 0; max >= threshold; c++, i = 1 - i) {
         auto currentHeatMap = deltaHeatMaps[i];
         auto nextHeatMap = deltaHeatMaps[1 - i];
 
@@ -121,12 +123,12 @@ void thermalSimulation::propagate(const float threshold) {
             chrono.resume();
         }
 
-        (*nextHeatMap)(redIndexes) =    ((*currentHeatMap)(redIndexes - 1) +
-                                        (*currentHeatMap)(redIndexes + 1) +
-                                        (*currentHeatMap)(redIndexes - row) +
-                                        (*currentHeatMap)(redIndexes + row)) / 4;
+        (*nextHeatMap)(redIndexes) = ((*currentHeatMap)(redIndexes - 1) +
+                                      (*currentHeatMap)(redIndexes + 1) +
+                                      (*currentHeatMap)(redIndexes - row) +
+                                      (*currentHeatMap)(redIndexes + row)) / 4;
 
-        (*nextHeatMap)(blackIndexes) =  ((*nextHeatMap)(blackIndexes - 1) +
+        (*nextHeatMap)(blackIndexes) = ((*nextHeatMap)(blackIndexes - 1) +
                                         (*nextHeatMap)(blackIndexes + 1) +
                                         (*nextHeatMap)(blackIndexes - row) +
                                         (*nextHeatMap)(blackIndexes + row)) / 4;
@@ -136,7 +138,7 @@ void thermalSimulation::propagate(const float threshold) {
 
     chrono.pause();
 
-    std::cout << "===== Finished simulation ======" << std::endl;
-    std::cout << "Computation time: " << chrono.get() << "seconds." <<std::endl;
+    std::cout << "======= Finished simulation \t======" << std::endl;
+    std::cout << "Computation time: " << chrono.get() << "seconds." << std::endl;
 
 }
