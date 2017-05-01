@@ -1,6 +1,5 @@
-# Repository of the fifth and last practical assignment
-## Thermical simulation
-Vincent, Thierry and Houssem.
+#GIF-7104 - Simulation thermique 2D
+Vincent, Thierry et Houssem.
 
 ### Prérequis
 La librairie ffmpeg doit être installée et accessible en ligne de commande.  
@@ -11,15 +10,6 @@ Le programme fait un appel system à ffmpeg pour générer la vidéo.
 À la racine du projet, créer un dossier "build" :
 ```
 mkdir build
-```
-Ensuite dans ce dossier, créer un dossier "frames" afin de sauvegarder les images de la simulation :
-```
-mkdir build/frames
-```
-
-Dans le même dossier, créer un dossier "video" afin de générer la video :
-```
-mkdir build/video
 ```
 
 Se déplacer dans le dossier, générer le makefile avec cmake et compiler :
