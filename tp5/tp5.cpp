@@ -1,9 +1,6 @@
-//
-// Created by kouros51 on 4/28/17.
-//
-
 #include <arrayfire.h>
 #include <iomanip>
+#include <sys/stat.h>
 #include <fstream>
 #include <algorithm>
 #include "src/headers/thermalSimulation.hpp"
@@ -16,13 +13,12 @@ void usage(char *inName);
 void generateVideo();
 
 int main(int argc, char *argv[]) {
-    /** Argument organisation of the array of argument "argv"
-     *  is mapped like:
+    /** The list of the array of arguments "argv":
      *  1- configFIle
      *  2- dimension of the simulation matrix, default = 100 * 100
      *  3- threshold to stop simulation, default = 10E-2
      *  4- # minimal iteration iteration before saving in an image, default 1
-     *  5- # cores to use in the simulation */
+     *  5- # cores to use in the simulation (In our case, seqential or parallel)*/
 
     try {
         vector<string> args(argv, argv + argc);
@@ -40,16 +36,32 @@ int main(int argc, char *argv[]) {
         optionRef = std::find(args.begin(), args.end(), "-i");
         long saveInterval = optionRef != args.end() ? atol(optionRef[1].c_str()) : 1;
 
+
+        /** Helper function*/
+        if (std::find(args.begin(), args.end(), "-h") != args.end()) {
+            usage(argv[0]);
+        }
+
         std::cout << "Number of rows: " << rows << std::endl
                   << "Number of columns: " << cols << std::endl
                   << "Frame save interval: " << saveInterval << std::endl
                   << "Threshold: " << threshold << std::endl
                   << "Configuration file location: " << threshold << std::endl;
 
-        /** Cleaning working directory */
-        std::cout << "Cleaning working directories.\n" << std::endl;
-        system("rm -f frames/*");
-        system("rm -f video/*");
+        /** Cleaning working directory
+         *  If the working directory exists, the programm will clean them,
+         *  if not it wil create it.
+         *  This applicable for UNIX file systems*/
+        std::cout << "Cleaning/Creating working directories.\n" << std::endl;
+        struct stat sb;
+        if ((stat("frames", &sb) == 0 && S_ISDIR(sb.st_mode)) && (stat("video", &sb) == 0 && S_ISDIR(sb.st_mode))) {
+            system("rm -f frames/*");
+            system("rm -f video/*");
+        } else {
+            system("mkdir frames");
+            system("mkdir video");
+        }
+
 
         /** Print Device information*/
         info();

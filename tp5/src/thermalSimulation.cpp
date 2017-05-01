@@ -1,7 +1,3 @@
-//
-// Created by kouros51 on 4/28/17.
-//
-
 #include "headers/thermalSimulation.hpp"
 #include <fstream>
 #include <iomanip>
